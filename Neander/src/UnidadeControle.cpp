@@ -28,99 +28,109 @@ UnidadeControle::UnidadeControle ( ) {
 
 int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ define qual será o próximo estado
 
-  switch(atual){
+  switch( atual ){
 
-  case 1:
-    proximo = 2;
+    case 1:
+      proximo = 2;
+    
     break;
 
-  case 2:
-   
-    if( opcode == NOP ){
+    case 2:
+     
+      if( opcode == NOP ){
+        proximo = 1;
+
+      }
+      else if( (opcode == STA) or (opcode == LDA) or (opcode == ADD) or (opcode == OR) or (opcode == AND) ) { 
+        proximo = 3;
+
+      } else if( opcode == NOT ) { 
+        proximo = 10;
+      }
+      else if( (opcode == JMP) or ( (opcode == JN) and (PO.ULA.N == true) ) or ( (opcode == JZ) and (PO.ULA.Z == true) ) ) { 
+        proximo = 11;
+
+      } else if( ( (opcode == JN) and (PO.ULA.N == false) ) or ( (opcode == JZ) and (PO.ULA.Z == false) ) ) { 
+        proximo = 12;
+
+      } else if( opcode == HLT ) { 
+        fim = true;
+
+      } else {
+        // erro
+        std::cout << "OPCODE inválido." << std::endl;
+      }
+
+    break;
+
+    case 3:
+
+      if( opcode == STA ) {
+        proximo = 4;
+
+      } else if(opcode == LDA) {
+        proximo = 6;
+
+      } else if( (opcode == ADD) or (opcode == OR) or (opcode == AND) ) {
+        proximo = 8;
+
+      } else {
+        std::cout << "OPCODE inválido." << std::endl;
+      }
+
+    break;
+
+    case 4:
+      proximo = 5;
+    
+    break;
+
+    case 5:
       proximo = 1;
-
-    }
-    else if( (opcode == STA) or (opcode == LDA) or (opcode == ADD) or (opcode == OR) or (opcode == AND) ) { 
-      proximo = 3;
-
-    } else if( opcode == NOT ) { 
-      proximo = 11;
-    }
-    else if( (opcode == JMP) or ( (opcode == JN) and (PO.ULA.N == true) ) or ( (opcode == JZ) and (PO.ULA.Z == true) ) ) { 
-      proximo = 12;
-
-    } else if( ( (opcode == JN) and (PO.ULA.N == false) ) or ( (opcode == JZ) and (PO.ULA.Z == false) ) ) { 
-      proximo = 13;
-
-    } else if( opcode == HLT ) { 
-      fim = true;
-
-    } else {
-      // erro
-      std::cout << "OPCODE inválido." << std::endl;
-    }
-
+    
     break;
 
-  case 3:
-
-    if( opcode == STA ) {
-      proximo = 4;
-
-    } else if(opcode == LDA) {
-      proximo = 6;
-
-    } else if( (opcode == ADD) or (opcode == OR) or (opcode == AND) ) {
-      proximo = 8;
-
-    } else {
-      std::cout << "OPCODE inválido." << std::endl;
-    }
-
+    case 6:
+      proximo = 7;
+    
     break;
 
-  case 4:
-    proximo = 5;
+    case 7:
+      proximo = 1;
+    
     break;
 
-  case 5:
-    proximo = 1;
+    case 8:
+      proximo = 9;
+    
     break;
 
-  case 6:
-    proximo = 7;
+    case 9:	
+      proximo = 1;
+    
     break;
 
-  case 7:
-    proximo = 1;
+    case 10:
+      proximo = 1;
+    
     break;
 
-  case 8:
-    proximo = 9;
+    case 11:
+      proximo = 1;
+    
     break;
 
-  case 9:	
-    proximo = 10;
-   break;
-
-  case 10:
-    proximo = 1;
+    case 12:
+      proximo = 1;
+    
     break;
 
-  case 11:
-    proximo = 1;
+    case 13:
+      proximo = 1;
+    
     break;
 
-  case 12:
-    proximo = 1;
-    break;
-
-  case 13:
-    proximo = 1;
-    break;
-
-  default: std::cout << "\n### Entrada inválida fte ###" << std::endl;
-
+    default: std::cout << "\n### Entrada inválida fte ###" << std::endl;
   }
 
   return proximo;
@@ -184,41 +194,44 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 8: 
+  case 8: // ULA: M0(1); LREM; R/W(0); LRDM;
     std::cout << "### ESTADO 8 ###" << std::endl;
-			
+    PO.M.loadREM( PO.M.rdm );
+    PO.M.loadRDM();
+		
     break;
 
-  case 9: 
+  case 9: // ULA: SULA(op); (atualiza N e Z); M1(0); LAC;
     std::cout << "### ESTADO 9 ###" << std::endl;
+    PO.AC.loadAC( PC.ULA.executarOperacao( PC.AC.x, PC.M.rdm, PO.RI.opcode ) );
 			
     break;
 
-  case 10: 
+  case 10: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
     std::cout << "### ESTADO 10 ###" << std::endl;
-			
+		PO.AC.loadAC( PC.ULA.executarOperacao( PC.AC.x ) );
+    // ### CONFERIR COMO FAREMOS NEGAÇÃO ###
+
     break;
 
-  case 11:
+  case 11: // JUMP, JN && N=1, JZ && Z=1: LPC; M0(0); LREM; R/W(0); LRDM; LPC;
     std::cout << "### ESTADO 11 ###" << std::endl;
+    PO.M.loadREM( PO.PC.leituraAtual );
+    PO.M.loadRDM();
+    // ### CONFERIR ESTE ESTADO ###
+
     break;
 
-  case 12: 
+  case 12: // JN && N=0, JZ && Z=0: IPC
     std::cout << "### ESTADO 12 ###" << std::endl;
+    PO.PC.incrementarPC();
 			
     break;
-
-  case 13:
-    std::cout << "### ESTADO 13 ###" << std::endl;
-			
-    break;
-
 
   default: std::cout << "\n### Entrada inválida fs ###" << std::endl;
 
   }
   std::cout << std::endl;
-
 
 }
 

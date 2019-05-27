@@ -13,23 +13,24 @@
 #define _Acumulador_H_
 #include <iostream>
 
+#ifndef LIXO
+#define LIXO 666
+
 class Acumulador { 
 
  public:
   int x; // valor guardado no acumulador
 
  public:
-  AC ( ){ x(666); }
+  AC ( ){ x(LIXO); }
   
   ~AC(void) = default;
 
   // carrega o acumulador com um valor
-  void loadAC( int valor ) 
-  {
-    x = valor;
-  }
+  void loadAC( int valor ) { x = valor; }
 
 };
 
 
+#endif
 #endif

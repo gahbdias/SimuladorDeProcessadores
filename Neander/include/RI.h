@@ -14,7 +14,6 @@
 
 #include <iostream>
 
-
 enum operacoes { NOP, STA, LDA, ADD, OR, AND, NOT, JMP, JN, JZ, HLT };
 
 class RegInstrucao { // Registrador de intruções
@@ -25,7 +24,7 @@ public:
 public:
   RegInstrucao( ) { opcode = NOP; }
   
-  ~RegInstrucao(void) = default;
+  ~RegInstrucao( void ) = default;
 
   void loadRI( int code ) { opcode = code; }
   

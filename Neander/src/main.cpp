@@ -16,15 +16,15 @@
 
 int main ( int argc, char *argv[] ) {
 	
-Memoria M( "../algoritmos/soma.txt", "../algoritmos/soma_dados.txt" );
+	Memoria M( "../algoritmos/soma.txt", "../algoritmos/soma_dados.txt" );
 
-/*
-for( int i=0; i< 256; i++ ){
+	/*
+	for( int i=0; i< 256; i++ ){
 
-std::cout << "linha[" << i << "] = " << memo.memoria[i] << std::endl; 
+	std::cout << "linha[" << i << "] = " << memo.memoria[i] << std::endl; 
 
-}
-*/
+	}
+	*/
 
-return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

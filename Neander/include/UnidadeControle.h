@@ -18,11 +18,11 @@
 class UnidadeControle {
 
     public:
-        int atual; // estado atual
-        int proximo; // proximo estado
-        int clock_; // representa uma abstração de clock; é do tipo clock?????????????
-        ParteOperativa PO;
-	bool fim; // fim da execução
+       int atual; // estado atual
+       int proximo; // proximo estado
+       int clock_; // representa uma abstração de clock; é do tipo clock?????????????
+       ParteOperativa PO;
+	   bool fim; // fim da execução
 
 
     public:

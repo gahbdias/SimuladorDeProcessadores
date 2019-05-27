@@ -1,7 +1,7 @@
 /**
  * @file Memoria.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador Neander
+ * @brief  Simulador do Neander
  * @version 1.00
  * @date Jun-2019
  * 
@@ -18,6 +18,9 @@
 #include <string>
 
 #include "RI.h"
+
+#ifndef LIXO
+#define LIXO 666
 
 class Memoria {
 
@@ -38,5 +41,5 @@ public:
 
 };
 
-
+#endif
 #endif

@@ -1,7 +1,7 @@
 /**
  * @file Memoria.cpp
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador Neander
+ * @brief  Simulador do Neander
  * @version 1.00
  * @date Jun-2019
  * 
@@ -15,14 +15,13 @@
 Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
   
   // Inicialização da memória
-  int lixo=666;
   for( int i=0; i< 256; i++ ){
-    memoria[i] = lixo;
+    memoria[i] = LIXO;
   }
 
   // inicializa RDM e REM
-  rem=lixo;
-  rdm=lixo;
+  rem = LIXO;
+  rdm = LIXO;
   
   std::string line; // linha do arquivo lida
 
