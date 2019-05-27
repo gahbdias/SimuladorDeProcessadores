@@ -13,14 +13,18 @@
 #include "../include/Memoria.h"
 
 Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
-
+  
+  // Inicialização da memória
   int lixo=666;
   for( int i=0; i< 256; i++ ){
     memoria[i] = lixo;
   }
 
+  // inicializa RDM e REM
+  rem=lixo;
+  rdm=lixo;
+  
   std::string line; // linha do arquivo lida
-  std::stringstream lineStr; // string stream para conversão
 
   // abre o algoritmo a ser executado
   std::ifstream algorithmFile;
@@ -34,41 +38,35 @@ Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
 
 
   // preenche memória com algoritmo
-  std::cout << "Lendo arquivo do algoritmo" << std::endl;
+  std::cout << "Lendo arquivo do algoritmo..." << std::endl;
 
   int i=0;
   while( !algorithmFile.eof() and i < 128 ){
-    //fflush( lineStr );
  
     char opcode[3];
-    int endereco;
+    int endereco=0;
 
     getline( algorithmFile, line );
-    lineStr << line;
+    std::stringstream lineStr(line); // string stream para conversão
 	
-    std::cout << "linha: \"" << line << "\" " << std::endl;
+
     if( line.size() <= 4 ){ // instrução de 1 byte
-      opcode[0] = line[0];
-      opcode[1] = line[1];
-      opcode[2] = line[2];
-
-      // lineStr >> opcode >> std::ws;
+      
+      lineStr >> opcode >> std::ws;
       this->memoria[i] = strToCode( opcode );
-      std::cout << " 1 byte " << opcode << std::endl;
 
+      i++;
+      
     } else { // instrução de 2 bytes
-      opcode[0] = line[0];
-      opcode[1] = line[1];
-      opcode[2] = line[2];
-
-      std::string tmp;
-      lineStr >>  tmp >> endereco >> std::ws;
+      
+      lineStr >> opcode >> std::ws >> endereco >> std::ws;
       this->memoria[i] = strToCode( opcode );
-      this->memoria[i] = endereco;
-      std::cout << " 2 byte; code: " << opcode << " end: " << endereco << std::endl;
+      this->memoria[i+1] = endereco;
+
+      i += 2;      
     }
 
-    i++;
+
   }
   algorithmFile.close();
 
@@ -83,23 +81,18 @@ Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
   }
 
   // preenche memória com os dados
-  std::cout << "Lendo arquivo de dados" << std::endl;
-
-  std::cout << "eof: " << dataFile.eof() << std::endl;
-
+  std::cout << "Lendo arquivo de dados..." << std::endl;
 
   i=128;
   while( !dataFile.eof() and i < 256 ){
     int dado;
 
     getline( dataFile, line );
-    lineStr << line;
-    std::cout << "linha: \"" << line << "\" " << std::endl;
-
+    std::stringstream lineStr(line); // string stream para conversão
+    
     lineStr >> dado >> std::ws;
-    std::cout << "dado[" << i << "] " << dado << std::endl;
-
     this->memoria[i] = dado;
+    
     i++;
   }
 
@@ -107,38 +100,41 @@ Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
 
 }
 
-int Memoria::lerRegistro( int endereco ){
-
-	return this->memoria[endereco];
-}
-
-void Memoria::escreverRegistro( int valor, int endereco ){
-
-	this->memoria[endereco] = valor;
-
-}
-
-void Memoria::RDM ( void )
+void Memoria::loadREM( int endereco )
 {
+  rem = endereço;
+}
+
+void Memoria::loadRDM( void ){
+
+  rdm = this->memoria[rem];
+}
+
+void Memoria::loadRDM( int valor ){
+
+  rdm = valor;
+}
+
+void Memoria::escreverRegistro( void ){
+
+	this->memoria[rem] = rdm;
 
 }
+
 
 int Memoria::strToCode( const std::string opcode )
 {
 
-  std::cout << " strToCode " << opcode << "." << std::endl;
-
-  if( opcode.compare("NOP") == 0 ){
+  if( opcode == "NOP" ){
     return NOP;
 
   } else if( opcode == "STA" ){
     return STA;
 
   } else if( opcode == "LDA" ){
-    std::cout << "entre!" << std::endl;
     return LDA;
 
-  } else if( opcode.compare("ADD") == 0 ){
+  } else if( opcode == "ADD" ){
     return ADD;
 
   } else if( opcode == "OR" ){
@@ -161,6 +157,7 @@ int Memoria::strToCode( const std::string opcode )
 
   } else if( opcode == "HLT" ){
     return HLT;
+    
   } else {
     std::cout << "Erro em strToCode: codigo inválido. " << std::endl; 
     return -1;

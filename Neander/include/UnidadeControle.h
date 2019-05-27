@@ -1,21 +1,21 @@
 /**
- * @file ParteControle.h
+ * @file UnidadeControle.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador de modelos Parte de Controle (PC) - Parte Operativa (PO)
+ * @brief  Simulador do Neander
  * @version 1.00
- * @date 06-04-2019
+ * @date Jun-2019
  * 
  * @copyright Copyright (c) 2019
  * 
  */
 
-#ifndef _ParteControle_H_
-#define _ParteControle_H_
+#ifndef _UnidadeControle_H_
+#define _UnidadeControle_H_
 #include <iostream>
 #include "ParteOperativa.h"
 
 
-class ParteControle {
+class UnidadeControle {
 
     public:
         int atual; // estado atual
@@ -26,8 +26,8 @@ class ParteControle {
 
 
     public:
-        ParteControle ( );
-        ~ParteControle(void) = default;
+        UnidadeControle ( );
+        ~UnidadeControle(void) = default;
 
         int fte( int atual ); // função de transição de estados
         void fs ( int atual ); // função de saída

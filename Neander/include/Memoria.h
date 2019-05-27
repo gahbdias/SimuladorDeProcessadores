@@ -23,14 +23,17 @@ class Memoria {
 
 public:
   int memoria[256];
+  int rem; // registrador de endereços da memória; guarda o endereço a ser acessado na memória
+  int rdm; // registrador de dados da memória; guarda a última leitura da memória
 
 public:
   Memoria( std::string  fileNameAlg, std::string  fileNameData );
   ~Memoria( void ) = default;            
 
-  int lerRegistro( int endereco ); // acessa um endereço e retorna seu valor
-  void escreverRegistro( int valor, int endereco ); // escreve um valor em um endereço
-  void RDM ( void ); // Registrador de dados da memória; guarda os dados lidos da memória 
+  void loadREM( int endereco ); // carrega REM
+  void loadRDM( void ); // acessa o endereço guardado no rem e guarda seu valor no rdm
+  void loadRDM( int valor ); // guarda valor passado no rdm (valor vem do acumulador)
+  void escreverRegistro( void ); // escreve o valor guardado no rdm no endereço guardado no rem
   int strToCode( std::string opcode ); // converte string lido do algoritmo para um código de operação
 
 };

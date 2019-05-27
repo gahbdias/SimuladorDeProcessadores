@@ -1,9 +1,9 @@
 /**
  * @file ProgCont.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador de modelos Parte de Controle (PC) - Parte Operativa (PO)
+ * @brief  Simulador do Neander
  * @version 1.00
- * @date 05-2019
+ * @date Jun-2019
  * 
  * @copyright Copyright (c) 2019
  * 
@@ -15,12 +15,21 @@
 
 class ProgCont { // ACUMULADOR
 
-	public:
-		int acumulador[2];
+ public:
+  int leituraAtual; // linha na memória contendo a instrução sendo executada
 
-    public:
-        ProgCont ( );
-        ~ProgCont(void) = default;
+ public:
+  ProgCont( )
+  {
+    leituraAtual(0);
+  }
+  
+  ~ProgCont(void) = default;
+
+  int incrementaPC( void )
+  {
+    this->leituraAtual++;
+  }
 
 };
 
