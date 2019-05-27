@@ -1,9 +1,9 @@
 /**
  * @file Memoria.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador de modelos Parte de Controle (PC) - Parte Operativa (PO)
+ * @brief  Simulador Neander
  * @version 1.00
- * @date 06-04-2019
+ * @date Jun-2019
  * 
  * @copyright Copyright (c) 2019
  * 
@@ -11,20 +11,27 @@
 
 #ifndef _MEM_H_
 #define _MEM_H_
-#include <iostream>
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+#include "RI.h"
 
 class Memoria {
 
-	private:
-		double memoria[256];
+public:
+  int memoria[256];
 
-    public:
-        REGS ( );
-        ~REGS(void) = default;            
+public:
+  Memoria( std::string  fileNameAlg, std::string  fileNameData );
+  ~Memoria( void ) = default;            
 
-        double lerRegistro( int endereco ); // acessa um endereço e retorna seu valor
-		void escreverRegistro( double valor, int endereco ); // escreve um valor em um endereço
+  int lerRegistro( int endereco ); // acessa um endereço e retorna seu valor
+  void escreverRegistro( int valor, int endereco ); // escreve um valor em um endereço
+  void RDM ( void ); // Registrador de dados da memória; guarda os dados lidos da memória 
+  int strToCode( std::string opcode ); // converte string lido do algoritmo para um código de operação
 
 };
 

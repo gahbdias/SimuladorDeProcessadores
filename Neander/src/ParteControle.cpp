@@ -12,99 +12,126 @@
 #include "../include/ParteControle.h"
 #include "../include/ParteOperativa.h"
 #include "../include/ULA.h"
+#include "../include/RI.h"
+
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 ParteControle::ParteControle ( ) {
-	this->atual = 0; // começa no estado 0
+	this->atual = 1; // começa no estado 0
 	this->proximo = 0; // será definido posteriormente (apenas para não ser inicializado com lixo)
-	this->clock_ = 0; // tempo 0 
-	this->fim = false; // para indicar que o programa não chegou ao fim
+	this->clock_ = 0; // tempo 0 ???????????????
+	this->fim=false; // controlado pelo HLT
 }
 
 
 int ParteControle::fte( int atual ){ // Função de Transição de Estados ~ define qual será o próximo estado
 
-	switch(atual){
-	        case 0: // while(!sair)
-			if( PO.ula.executarOperacao( PO.regs.lerRegistro(0) ) ) {proximo = 1;}
-			else { fim = true; }
-		break;
+  switch(atual){
 
-		case 1:
-			proximo = 2;
-		break;
+  case 1:
+    proximo = 2;
+    break;
 
-		case 2:
-			proximo = 3;
-		break;
+  case 2:
+   
+    if( opcode == NOP ){
+      proximo = 1;
 
-		case 3:
-			proximo = 4;
-		break;
+    }
+    else if( (opcode == STA) or (opcode == LDA) or (opcode == ADD) or (opcode == OR) or (opcode == AND) ) { 
+      proximo = 3;
 
-		case 4:
-			proximo = 5;
-		break;
+    } else if( opcode == NOT ) { 
+      proximo = 13;
+    }
+    else if( (opcode == JMP) or ( (opcode == JN) and (PO.ULA.N == true) ) or ( (opcode == JZ) and (PO.ULA.Z == true) ) ) { 
+      proximo = 14;
 
-		case 5:
-			proximo = 6;
-		break;
+    } else if( ( (opcode == JN) and (PO.ULA.N == false) ) or ( (opcode == JZ) and (PO.ULA.Z == false) ) ) { 
+      proximo = 15;
 
-		case 6:
-			proximo = 7;
-		break;
+    } else if( opcode == HLT ) { 
+      fim = true;
 
-		case 7:
-			proximo = 8;
-		break;
+    } else {
+      // erro
+      std::cout << "OPCODE inválido." << std::endl;
+    }
 
-		case 8:
-			proximo = 9;
-		break;
+    break;
 
-		case 9:
-			proximo = 10;
-		break;
+  case 3:
+    proximo = 4;
+    break;
 
-		case 10:
-			proximo = 11;
-		break;
+  case 4:
 
-		/*
-		** [0] = sair , [1] = x , [2] = r, [3] = res   , [4] = aux1, 
-		** [5] = aux2 , [6] = rp, [7] = 1, [8] = 10e-16, [9] = -1
-		*/
-		case 11:	// (x < rp)
-			if( PO.ula.executarOperacao( PO.regs.lerRegistro(1), PO.regs.lerRegistro(6), 5 ) ) {proximo = 12;} 
-			else {proximo = 13;}
-		break;
+    if( opcode == STA ) {
+      proximo = 5;
 
-		case 12:
-			proximo = 13;
-		break;
+    } else if(opcode == LDA) {
+      proximo = 7;
 
-		case 13:
-			proximo = 14;
-		break;
+    } else if( (opcode == ADD) or (opcode == OR) or (opcode == AND) ) {
+      proximo = 10;
 
-		case 14:	// (aux1 || aux2)
-			if ( PO.ula.executarOperacao( PO.regs.lerRegistro(4), PO.regs.lerRegistro(5), 6 ) ) {proximo = 15;} 
-			else {proximo = 16;}
-		break;
+    } else {
+      std::cout << "OPCODE inválido." << std::endl;
+    }
 
-		case 15:
-			proximo = 0;
-		break;
+    break;
 
-		case 16:
-			proximo = 0;
-		break;
-		default: std::cout << "\n### Entrada inválida fte ###" << std::endl;
+  case 5:
+    proximo = 6;
+    break;
 
-	}
+  case 6:
+    proximo = 1;
+    break;
 
-	return proximo;
+  case 7:
+    proximo = 8;
+    break;
+
+  case 8:
+    proximo = 9;
+    break;
+
+  case 9:
+    proximo = 1;
+    break;
+
+  case 10:
+    proximo = 11;
+    break;
+
+  case 11:	
+    proximo = 12;
+   break;
+
+  case 12:
+    proximo = 1;
+    break;
+
+  case 13:
+    proximo = 1;
+    break;
+
+  case 14:
+    proximo = 1;
+    break;
+
+  case 15:
+    proximo = 1;
+    break;
+
+  default: std::cout << "\n### Entrada inválida fte ###" << std::endl;
+
+  }
+
+  return proximo;
 }
 
 void ParteControle::fs ( int atual ) { // Função de saída ~ recebe o estado atual e controla as operações (chama as funções da PO)
@@ -116,27 +143,8 @@ void ParteControle::fs ( int atual ) { // Função de saída ~ recebe o estado a
 
 
 	switch(atual){
-		/*
-		** [0] = sair , [1] = x , [2] = r, [3] = res   , [4] = aux1, 
-		** [5] = aux2 , [6] = rp, [7] = 1, [8] = 10e-16, [9] = -1
-		*/
 
-		/*
-		**	0 = soma (+)
-		**	1 = subtração (-)
-		**	2 = multiplicação (*)
-		**	3 = divisão (/)
-		**	4 = igualdade (==)
-		**	5 = menor (<)
-		**	6 = ou (||)
-		**	
-		*/
-
-		case 0: // !sair ~ Apenas transição de estado
-			std::cout << "### ESTADO 0 ###" << std::endl;
-		break;
-
-		case 1: // aux2 = r*r
+		case 1: 
 			std::cout << "### ESTADO 1 ###" << std::endl;
 			std::cout << "Antes de (aux2 = r*r): " << PO.regs.lerRegistro(5) << std::endl;
 

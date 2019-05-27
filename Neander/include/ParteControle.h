@@ -20,9 +20,9 @@ class ParteControle {
     public:
         int atual; // estado atual
         int proximo; // proximo estado
-        int clock_; // representa uma abstração de clock
-        bool fim; // para saber se o algoritmo chegou ao fim do cálculo
+        int clock_; // representa uma abstração de clock; é do tipo clock?????????????
         ParteOperativa PO;
+	bool fim; // fim da execução
 
 
     public:

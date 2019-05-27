@@ -13,15 +13,21 @@
 #define _RI_H_
 #include <iostream>
 
-class RI { // ACUMULADOR
 
-	public:
-		int acumulador[2];
+enum operacoes { NOP, STA, LDA, ADD, OR, AND, NOT, JMP, JN, JZ, HLT };
 
-    public:
-        RI ( );
-        ~RI(void) = default;
+class RI { // Registrador de 
 
+public:
+  int opcode;
+
+public:
+  RI ( )
+  {
+    opcode = NOP;
+  }
+  ~RI(void) = default;
+  
 };
 
 
