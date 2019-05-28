@@ -9,19 +9,17 @@
  * 
  */
 
-
 #include "../include/Memoria.h"
 
-Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
-  
+void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ){
   // Inicialização da memória
   for( int i=0; i< 256; i++ ){
-    memoria[i] = LIXO;
+    memoria[i] = 666;
   }
 
   // inicializa RDM e REM
-  rem = LIXO;
-  rdm = LIXO;
+  rem = 666;
+  rdm = 666;
   
   std::string line; // linha do arquivo lida
 
@@ -47,7 +45,7 @@ Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
 
     getline( algorithmFile, line );
     std::stringstream lineStr(line); // string stream para conversão
-	
+    
 
     if( line.size() <= 4 ){ // instrução de 1 byte
       
@@ -96,12 +94,11 @@ Memoria::Memoria ( std::string  fileNameAlg, std::string  fileNameData ){
   }
 
   dataFile.close();
-
 }
 
 void Memoria::loadREM( int endereco )
 {
-  rem = endereço;
+  rem = endereco;
 }
 
 void Memoria::loadRDM( void ){

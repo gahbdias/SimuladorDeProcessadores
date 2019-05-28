@@ -1,5 +1,5 @@
 /**
- * @file RI.h
+ * @file RegInstrucao.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
  * @brief  Simulador do Neander
  * @version 1.00

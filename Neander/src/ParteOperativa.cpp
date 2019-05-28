@@ -11,4 +11,4 @@
 
 #include "../include/ParteOperativa.h"
 
-ParteOperativa::ParteOperativa(){}   
+ParteOperativa::ParteOperativa(){} 

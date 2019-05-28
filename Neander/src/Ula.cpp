@@ -11,13 +11,11 @@
 
 #include "../include/Ula.h"
 
-Ula::Ula ( ){};
-
 int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 
-	int resultado = LIXO;
+	int resultado = 666;
 
-	switch(operacao){
+	switch( operacao ){
 		case ADD:
 			resultado = ( x + y );
 		break;
@@ -32,7 +30,7 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 
 		default: 
 			std::cout << "\n### Entrada inválida ULA ###" << std::endl;
-		return LIXO;
+		return 666;
 	}
 
 	atualizaNZ( resultado );
@@ -40,13 +38,13 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 }
 
 int Ula::executarOperacao( int x ) { // NOT
-	int resultado = LIXO;
-	resultado = !x; // ### CONFERIR COMO FAREMOS NEGAÇÃO ###
+	int resultado = 666;
+	resultado = (x*(-1))-1;
 	atualizaNZ( resultado );
 	return resultado;
 } 
 
-int atualizaNZ( int resultado ){
+void Ula::atualizaNZ( int resultado ){
 	if ( resultado == 0 ){
 		this->Z = true;
 	}

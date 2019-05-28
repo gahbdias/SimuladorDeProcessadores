@@ -9,22 +9,31 @@
  * 
  */
 
-//#include "../include/ParteOperativa.h"
-//#include "../include/UnidadeControle.h"
-//#include "../include/ULA.h"
-#include "../include/Memoria.h"
+#include "../include/UnidadeControle.h"
 
 int main ( int argc, char *argv[] ) {
-	
-	Memoria M( "../algoritmos/soma.txt", "../algoritmos/soma_dados.txt" );
 
-	/*
-	for( int i=0; i< 256; i++ ){
-
-	std::cout << "linha[" << i << "] = " << memo.memoria[i] << std::endl; 
-
+	if( argc < 3 ){
+		return EXIT_FAILURE;
 	}
-	*/
+
+	std::string algFile = argv[1];
+	std::string dataFile = argv[2];
+	
+	UnidadeControle UC;
+
+	UC.PO.M.preencherMemoria(algFile, dataFile);
 
 	return EXIT_SUCCESS;
 }
+
+
+
+
+/*
+for( int i=0; i< 256; i++ ){
+
+std::cout << "linha[" << i << "] = " << memo.memoria[i] << std::endl; 
+
+}
+*/

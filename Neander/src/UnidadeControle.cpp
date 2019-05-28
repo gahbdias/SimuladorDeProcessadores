@@ -10,13 +10,6 @@
  */
 
 #include "../include/UnidadeControle.h"
-#include "../include/ParteOperativa.h"
-#include "../include/ULA.h"
-#include "../include/RI.h"
-
-#include <thread>
-#include <chrono>
-#include <iostream>
 
 UnidadeControle::UnidadeControle ( ) {
 	this->atual = 1; // começa no estado 0
@@ -37,45 +30,45 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
 
     case 2:
      
-      if( opcode == NOP ){
+      if( PO.RI.opcode == NOP ){
         proximo = 1;
 
       }
-      else if( (opcode == STA) or (opcode == LDA) or (opcode == ADD) or (opcode == OR) or (opcode == AND) ) { 
+      else if( (PO.RI.opcode == STA) or (PO.RI.opcode == LDA) or (PO.RI.opcode == ADD) or (PO.RI.opcode == OR) or (PO.RI.opcode == AND) ) { 
         proximo = 3;
 
-      } else if( opcode == NOT ) { 
+      } else if( PO.RI.opcode == NOT ) { 
         proximo = 10;
       }
-      else if( (opcode == JMP) or ( (opcode == JN) and (PO.ULA.N == true) ) or ( (opcode == JZ) and (PO.ULA.Z == true) ) ) { 
+      else if( (PO.RI.opcode == JMP) or ( (PO.RI.opcode == JN) and (PO.ULA.N == true) ) or ( (PO.RI.opcode == JZ) and (PO.ULA.Z == true) ) ) { 
         proximo = 11;
 
-      } else if( ( (opcode == JN) and (PO.ULA.N == false) ) or ( (opcode == JZ) and (PO.ULA.Z == false) ) ) { 
+      } else if( ( (PO.RI.opcode == JN) and (PO.ULA.N == false) ) or ( (PO.RI.opcode == JZ) and (PO.ULA.Z == false) ) ) { 
         proximo = 12;
 
-      } else if( opcode == HLT ) { 
+      } else if( PO.RI.opcode == HLT ) { 
         fim = true;
 
       } else {
         // erro
-        std::cout << "OPCODE inválido." << std::endl;
+        std::cout << "PO.RI.OPCODE inválido." << std::endl;
       }
 
     break;
 
     case 3:
 
-      if( opcode == STA ) {
+      if( PO.RI.opcode == STA ) {
         proximo = 4;
 
-      } else if(opcode == LDA) {
+      } else if(PO.RI.opcode == LDA) {
         proximo = 6;
 
-      } else if( (opcode == ADD) or (opcode == OR) or (opcode == AND) ) {
+      } else if( (PO.RI.opcode == ADD) or (PO.RI.opcode == OR) or (PO.RI.opcode == AND) ) {
         proximo = 8;
 
       } else {
-        std::cout << "OPCODE inválido." << std::endl;
+        std::cout << "PO.RI.OPCODE inválido." << std::endl;
       }
 
     break;
@@ -125,11 +118,6 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
     
     break;
 
-    case 13:
-      proximo = 1;
-    
-    break;
-
     default: std::cout << "\n### Entrada inválida fte ###" << std::endl;
   }
 
@@ -137,12 +125,6 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
 }
 
 void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado atual e controla as operações (chama as funções da PO)
-
-  double valor;
-
-  std::cout << std::endl;
-  std::cout << "Clocks decorridos:" << clock_ << std::endl;
-
 
   switch(atual){
 
@@ -203,14 +185,13 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
   case 9: // ULA: SULA(op); (atualiza N e Z); M1(0); LAC;
     std::cout << "### ESTADO 9 ###" << std::endl;
-    PO.AC.loadAC( PC.ULA.executarOperacao( PC.AC.x, PC.M.rdm, PO.RI.opcode ) );
+    PO.AC.loadAC( PO.ULA.executarOperacao( PO.AC.x, PO.M.rdm, PO.RI.opcode ) );
 			
     break;
 
   case 10: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
     std::cout << "### ESTADO 10 ###" << std::endl;
-		PO.AC.loadAC( PC.ULA.executarOperacao( PC.AC.x ) );
-    // ### CONFERIR COMO FAREMOS NEGAÇÃO ###
+		PO.AC.loadAC( PO.ULA.executarOperacao( PO.AC.x ) );
 
     break;
 
@@ -218,7 +199,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 11 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
-    // ### CONFERIR ESTE ESTADO ###
+    PO.PC.loadPC( PO.M.rdm ); // Go to endereço contido no RDM
 
     break;
 
@@ -231,6 +212,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   default: std::cout << "\n### Entrada inválida fs ###" << std::endl;
 
   }
+
   std::cout << std::endl;
 
 }

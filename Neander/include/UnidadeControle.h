@@ -12,6 +12,9 @@
 #ifndef _UnidadeControle_H_
 #define _UnidadeControle_H_
 #include <iostream>
+#include <thread>
+#include <chrono>
+
 #include "ParteOperativa.h"
 
 
@@ -22,11 +25,11 @@ class UnidadeControle {
        int proximo; // proximo estado
        int clock_; // representa uma abstração de clock; é do tipo clock?????????????
        ParteOperativa PO;
-	   bool fim; // fim da execução
+	     bool fim; // fim da execução
 
 
     public:
-        UnidadeControle ( );
+        UnidadeControle ();
         ~UnidadeControle(void) = default;
 
         int fte( int atual ); // função de transição de estados

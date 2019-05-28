@@ -12,18 +12,25 @@
 #ifndef _ParteOperativa_H_
 #define _ParteOperativa_H_
 #include <iostream>
-#include "ULA.h"
-#include "REGS.h"
+
+#include "Memoria.h"
+#include "Ula.h"
+#include "Acumulador.h"
+#include "ProgCont.h"
+#include "RegInstrucao.h"
 
 class ParteOperativa {
 
     public:
-    	ULA ula; // unidade lógica aritmética
-    	REGS regs; // registradores
+    	Memoria M; 
+    	Ula ULA; // unidade lógica aritmética
+    	Acumulador AC;
+    	ProgCont PC; // apontador de programa
+    	RegInstrucao RI; // registrador de instruções
 
     public:
-        ParteOperativa ( );
-        ~ParteOperativa(void) = default;
+        ParteOperativa ();
+        ~ParteOperativa( void ) = default;
 };
 
 

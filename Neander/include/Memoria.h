@@ -17,10 +17,10 @@
 #include <sstream>
 #include <string>
 
-#include "RI.h"
+#include "RegInstrucao.h"
 
-#ifndef LIXO
-#define LIXO 666
+/*#ifndef LIXO
+#define LIXO 666*/
 
 class Memoria {
 
@@ -30,9 +30,10 @@ public:
   int rdm; // registrador de dados da memória; guarda a última leitura da memória
 
 public:
-  Memoria( std::string  fileNameAlg, std::string  fileNameData );
-  ~Memoria( void ) = default;            
+  Memoria(){};
+  ~Memoria( void ) = default;   
 
+  void preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ); // preenche a memoria com dados do arquivo 
   void loadREM( int endereco ); // carrega REM
   void loadRDM( void ); // acessa o endereço guardado no rem e guarda seu valor no rdm
   void loadRDM( int valor ); // guarda valor passado no rdm (valor vem do acumulador)
@@ -42,4 +43,4 @@ public:
 };
 
 #endif
-#endif
+//#endif

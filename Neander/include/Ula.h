@@ -12,21 +12,30 @@
 #ifndef _ULA_H_
 #define _ULA_H_
 #include <iostream>
-#include "RI.h"
+#include "RegInstrucao.h"
 
-#ifndef LIXO
-#define LIXO 666
+/*#ifndef LIXO
+#define LIXO 666*/
 
-class ULA { // Unidade Lógica-Aritmética
+class Ula { // Unidade Lógica-Aritmética
+
+	public:
+		bool Z; // Indica se o resultado da ULA é zero
+		bool N;	// Indica se o resultado da ULA é negativo
 
     public:
-        Ula ( );
+        Ula () {
+        	this->Z = false;
+        	this->N = false;
+        }
+
         ~Ula(void) = default;            
 
-        double executarOperacao( double a, double b, int operacao ); // executa operações binárias
-        int executarOperacao( int a ); // para operações unárias
+        int executarOperacao( int x, int y, int operacao ); // executa operações binárias
+        int executarOperacao( int x ); // para operações unárias
+        void atualizaNZ( int resultado );
 
 };
 
 #endif
-#endif
+//#endif

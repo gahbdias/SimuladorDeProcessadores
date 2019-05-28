@@ -13,17 +13,19 @@
 #define _ProgCont_H_
 #include <iostream>
 
-class ProgCont { // ACUMULADOR
+class ProgCont { 
 
  public:
   int leituraAtual; // linha na memória contendo a instrução sendo executada
 
  public:
-  ProgCont( ) { leituraAtual(0); }
+  ProgCont( ) { leituraAtual = 0; }
   
   ~ProgCont(void) = default;
 
-  int incrementaPC( void ) { this->leituraAtual++; }
+  void loadPC( int valor ) { this->leituraAtual = valor; } 
+
+  void incrementarPC( void ) { this->leituraAtual++; }
 
 };
 
