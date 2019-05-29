@@ -172,6 +172,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 5: // STA: R/W(1); (escreve dado no rdm no endereço do rem)
     std::cout << "### ESTADO 5 ###" << std::endl;
     PO.M.escreverRegistro();
+    relogio.clockMemoria();
       
     break;
 
@@ -179,6 +180,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 6 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     PO.M.loadRDM();
+    relogio.clockMemoria();
     
     break;
 
@@ -199,12 +201,14 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 9: // ULA: SULA(op); (atualiza N e Z); M1(0); LAC;
     std::cout << "### ESTADO 9 ###" << std::endl;
     PO.AC.loadAC( PO.ULA.executarOperacao( PO.AC.x, PO.M.rdm, PO.RI.opcode ) );
+    relogio.clockLA();
 			
     break;
 
   case 10: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
     std::cout << "### ESTADO 10 ###" << std::endl;
 		PO.AC.loadAC( PO.ULA.executarOperacao( PO.AC.x ) );
+    relogio.clockLA();
 
     break;
 
@@ -213,6 +217,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
     PO.PC.loadPC( PO.M.rdm ); // Go to endereço contido no RDM
+    relogio.clockMemoria();
 
     break;
 
