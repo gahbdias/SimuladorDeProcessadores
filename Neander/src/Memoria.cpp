@@ -11,15 +11,27 @@
 
 #include "../include/Memoria.h"
 
+void Memoria::imprimeDados (){
+
+  std::cout << "RDM: " << rdm << std::endl;
+  std::cout << "REM: " << rem << std::endl;
+
+  for( int i=128; i<256; i++ ){
+    if( memoria[i] != LIXO ){
+      std::cout << "Memoria[" << i << "]: " << memoria[i] << std::endl;
+    }
+  }
+}
+
 void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ){
   // Inicialização da memória
   for( int i=0; i< 256; i++ ){
-    memoria[i] = 666;
+    memoria[i] = LIXO;
   }
 
   // inicializa RDM e REM
-  rem = 666;
-  rdm = 666;
+  rem = LIXO;
+  rdm = LIXO;
   
   std::string line; // linha do arquivo lida
 
@@ -96,8 +108,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
   dataFile.close();
 }
 
-void Memoria::loadREM( int endereco )
-{
+void Memoria::loadREM( int endereco ){
   rem = endereco;
 }
 
@@ -114,7 +125,6 @@ void Memoria::loadRDM( int valor ){
 void Memoria::escreverRegistro( void ){
 
 	this->memoria[rem] = rdm;
-
 }
 
 
@@ -158,5 +168,4 @@ int Memoria::strToCode( const std::string opcode )
     std::cout << "Erro em strToCode: codigo inválido. " << std::endl; 
     return -1;
   }
-
 }

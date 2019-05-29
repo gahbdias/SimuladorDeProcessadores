@@ -16,24 +16,25 @@
 #include <chrono>
 
 #include "ParteOperativa.h"
-
+#include "Relogio.h"
 
 class UnidadeControle {
 
     public:
        int atual; // estado atual
        int proximo; // proximo estado
-       int clock_; // representa uma abstração de clock; é do tipo clock?????????????
+       Relogio relogio; // clock da unidade de controle
        ParteOperativa PO;
 	     bool fim; // fim da execução
 
 
     public:
         UnidadeControle ();
-        ~UnidadeControle(void) = default;
+        ~UnidadeControle( void ) = default;
 
         int fte( int atual ); // função de transição de estados
         void fs ( int atual ); // função de saída
+        void imprimeEstado( void );
 
 };
 

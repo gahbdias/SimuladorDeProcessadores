@@ -11,11 +11,12 @@
 
 #ifndef _ULA_H_
 #define _ULA_H_
+
 #include <iostream>
+ 
 #include "RegInstrucao.h"
 
-/*#ifndef LIXO
-#define LIXO 666*/
+#define LIXO 666
 
 class Ula { // Unidade Lógica-Aritmética
 
@@ -32,10 +33,17 @@ class Ula { // Unidade Lógica-Aritmética
         ~Ula(void) = default;            
 
         int executarOperacao( int x, int y, int operacao ); // executa operações binárias
+
         int executarOperacao( int x ); // para operações unárias
+
         void atualizaNZ( int resultado );
+
+        void imprimeNZ( void ) { 
+            std::cout << std::boolalpha;
+            std::cout << "N: " << N << std::endl;
+            std::cout << "Z: " << Z << std::endl;
+        }
 
 };
 
 #endif
-//#endif

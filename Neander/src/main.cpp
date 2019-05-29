@@ -13,6 +13,11 @@
 
 int main ( int argc, char *argv[] ) {
 
+	int estado = 1;
+
+	std::cout << "~ Simulador do NEANDER ~" << std::endl;
+	std::cout << "Iniciando..." << std::endl;
+
 	if( argc < 3 ){
 		return EXIT_FAILURE;
 	}
@@ -21,19 +26,12 @@ int main ( int argc, char *argv[] ) {
 	std::string dataFile = argv[2];
 	
 	UnidadeControle UC;
-
 	UC.PO.M.preencherMemoria(algFile, dataFile);
+
+	while( !UC.fim ){
+		UC.fs(estado);
+		estado = UC.fte(estado);
+	}
 
 	return EXIT_SUCCESS;
 }
-
-
-
-
-/*
-for( int i=0; i< 256; i++ ){
-
-std::cout << "linha[" << i << "] = " << memo.memoria[i] << std::endl; 
-
-}
-*/

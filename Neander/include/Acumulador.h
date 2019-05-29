@@ -13,8 +13,7 @@
 #define _Acumulador_H_
 #include <iostream>
 
-/*#ifndef LIXO
-#define LIXO 666*/
+#define VAZIO 666
 
 class Acumulador { 
 
@@ -22,12 +21,19 @@ class Acumulador {
   int x; // valor guardado no acumulador
 
  public:
-  	Acumulador( ){ x = 666; }
+  	Acumulador( ){ x = VAZIO; }
   
   	~Acumulador(void) = default;
+  	
+  	void loadAC( int valor ) { x = valor; } // carrega o acumulador com um valor
 
-  	// carrega o acumulador com um valor
-  	void loadAC( int valor ) { x = valor; }
+  	void imprimeAC( void ) { 
+  		if( x == VAZIO ){
+  			std::cout << "AC: Vazio" << std::endl; 
+  		} else {
+  			std::cout << "AC: " << x << std::endl; 
+  		}  		
+  	}
 
 };
 

@@ -13,7 +13,7 @@
 
 int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 
-	int resultado = 666;
+	int resultado = LIXO;
 
 	switch( operacao ){
 		case ADD:
@@ -30,7 +30,7 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 
 		default: 
 			std::cout << "\n### Entrada inválida ULA ###" << std::endl;
-		return 666;
+		return LIXO;
 	}
 
 	atualizaNZ( resultado );
@@ -38,7 +38,7 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 }
 
 int Ula::executarOperacao( int x ) { // NOT
-	int resultado = 666;
+	int resultado = LIXO;
 	resultado = (x*(-1))-1;
 	atualizaNZ( resultado );
 	return resultado;

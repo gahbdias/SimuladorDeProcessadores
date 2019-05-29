@@ -19,15 +19,16 @@ class ProgCont {
   int leituraAtual; // linha na memória contendo a instrução sendo executada
 
  public:
-  ProgCont( ) { leituraAtual = 0; }
+  ProgCont( void ) { leituraAtual = 0; }
   
-  ~ProgCont(void) = default;
+  ~ProgCont( void ) = default;
 
   void loadPC( int valor ) { this->leituraAtual = valor; } 
 
   void incrementarPC( void ) { this->leituraAtual++; }
 
-};
+  void imprimePC( void ) { std::cout << "PC: " << leituraAtual << std::endl; };
 
+};
 
 #endif

@@ -11,11 +11,21 @@
 
 #include "../include/UnidadeControle.h"
 
-UnidadeControle::UnidadeControle ( ) {
+UnidadeControle::UnidadeControle ( void ) {
 	this->atual = 1; // começa no estado 0
 	this->proximo = 0; // será definido posteriormente (apenas para não ser inicializado com lixo)
-	this->clock_ = 0; // tempo 0 ???????????????
 	this->fim=false; // controlado pelo HLT
+}
+
+void UnidadeControle::imprimeEstado( void ){
+  PO.PC.imprimePC();
+  PO.RI.imprimeRI();
+  PO.ULA.imprimeNZ();
+  PO.AC.imprimeAC();
+  PO.M.imprimeDados();
+  relogio.imprimeClock();
+  std::cout << "################" << std::endl;
+  std::cout << std::endl;
 }
 
 
@@ -126,13 +136,14 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
 
 void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado atual e controla as operações (chama as funções da PO)
 
-  switch(atual){
+  switch( atual ){
 
   case 1: // Busca: LPC; M0(0); LREM; R/W(0); IPC; LRDM;
     std::cout << "### ESTADO 1 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
     PO.PC.incrementarPC();
+    relogio.clockMemoria();
 
     break;
 
@@ -147,6 +158,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
     PO.PC.incrementarPC();
+    relogio.clockMemoria();
     
     break;
 
@@ -173,6 +185,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 7: // LDA: M1(1); LAC; (atualiza N e Z)
     std::cout << "### ESTADO 7 ###" << std::endl;
     PO.AC.loadAC( PO.M.rdm );
+    PO.ULA.atualizaNZ( PO.AC.x );
     
     break;
 
@@ -212,6 +225,8 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   default: std::cout << "\n### Entrada inválida fs ###" << std::endl;
 
   }
+
+  imprimeEstado();
 
   std::cout << std::endl;
 

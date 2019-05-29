@@ -19,8 +19,8 @@
 
 #include "RegInstrucao.h"
 
-/*#ifndef LIXO
-#define LIXO 666*/
+#ifndef LIXO
+#define LIXO 666
 
 class Memoria {
 
@@ -31,16 +31,24 @@ public:
 
 public:
   Memoria(){};
+
   ~Memoria( void ) = default;   
 
   void preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ); // preenche a memoria com dados do arquivo 
+
   void loadREM( int endereco ); // carrega REM
+
   void loadRDM( void ); // acessa o endereço guardado no rem e guarda seu valor no rdm
+
   void loadRDM( int valor ); // guarda valor passado no rdm (valor vem do acumulador)
+
   void escreverRegistro( void ); // escreve o valor guardado no rdm no endereço guardado no rem
+
   int strToCode( std::string opcode ); // converte string lido do algoritmo para um código de operação
+
+  void imprimeDados();
 
 };
 
 #endif
-//#endif
+#endif
