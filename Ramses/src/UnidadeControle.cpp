@@ -49,7 +49,9 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
 
       } else if( PO.RI.opcode == NOT ) { 
         proximo = 10;
-      }
+      } 
+
+
       else if( (PO.RI.opcode == JMP) or ( (PO.RI.opcode == JN) and (PO.ULA.N == true) ) or ( (PO.RI.opcode == JZ) and (PO.ULA.Z == true) ) ) { 
         proximo = 11;
 
