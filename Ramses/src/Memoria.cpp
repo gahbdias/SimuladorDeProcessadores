@@ -113,23 +113,19 @@ void Memoria::loadREM( int endereco ){
 }
 
 void Memoria::loadRDM( void ){
-
   rdm = this->memoria[rem];
 }
 
 void Memoria::loadRDM( int valor ){
-
   rdm = valor;
 }
 
 void Memoria::escreverRegistro( void ){
-
 	this->memoria[rem] = rdm;
 }
 
 
-int Memoria::strToCode( const std::string opcode )
-{
+int Memoria::strToCode( const std::string opcode ) {
 
   if( opcode == "NOP" ){
     return NOP;

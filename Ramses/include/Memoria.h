@@ -28,13 +28,14 @@ public:
   int memoria[256];
   int rem; // registrador de endereços da memória; guarda o endereço a ser acessado na memória
   int rdm; // registrador de dados da memória; guarda a última leitura da memória
+  int temp; // temp
 
 public:
   Memoria(){};
 
   ~Memoria( void ) = default;   
 
-  void preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ); // preenche a memoria com dados do arquivo 
+  void escreverRegistro( void ); // escreve o valor guardado no rdm no endereço guardado no rem
 
   void loadREM( int endereco ); // carrega REM
 
@@ -42,8 +43,8 @@ public:
 
   void loadRDM( int valor ); // guarda valor passado no rdm (valor vem do acumulador)
 
-  void escreverRegistro( void ); // escreve o valor guardado no rdm no endereço guardado no rem
-
+  void preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ); // preenche a memoria com dados do arquivo  
+  
   int strToCode( std::string opcode ); // converte string lido do algoritmo para um código de operação
 
   void imprimeDados();

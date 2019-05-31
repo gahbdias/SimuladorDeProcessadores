@@ -12,7 +12,7 @@
 #include "../include/RegInstrucao.h"
 
 void RegInstrucao::loadRI( int instrucao ){
-	decodificar(instrucao);
+	decodificar( instrucao );
 }
 
 void RegInstrucao::decodificar( int instrucao ){

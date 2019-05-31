@@ -14,6 +14,10 @@
 
 #include <iostream>
 
+#include "RA.h"
+#include "RB.h"
+#include "RX.h"
+
 class BancoRegistradores { // Registrador de intruções
 
 	public:
@@ -22,14 +26,9 @@ class BancoRegistradores { // Registrador de intruções
 	  RX rx; // modo de enderaçamento
 
 	public:
-	  BancoRegistradores( ) { opcode = NOP; }
+	  BancoRegistradores( ) { }
 	  
-	  ~BancoRegistradores( void ) = default;
-
-	  void loadRI( int instrucao );
-
-	  void decodificar( int instrucao );
-	  
+	  ~BancoRegistradores( void ) = default;	  
 };
 
 #endif

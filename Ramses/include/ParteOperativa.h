@@ -15,7 +15,7 @@
 
 #include "Memoria.h"
 #include "Ula.h"
-#include "Acumulador.h"
+#include "BancoRegistradores.h"
 #include "ProgCont.h"
 #include "RegInstrucao.h"
 
@@ -24,7 +24,7 @@ class ParteOperativa {
     public:
     	Memoria M; 
     	Ula ULA; // unidade lógica aritmética
-    	Acumulador AC;
+    	BancoRegistradores BR;
     	ProgCont PC; // apontador de programa
     	RegInstrucao RI; // registrador de instruções
 

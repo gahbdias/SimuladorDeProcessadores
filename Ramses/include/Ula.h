@@ -23,6 +23,7 @@ class Ula { // Unidade Lógica-Aritmética
 	public:
 		bool Z; // Indica se o resultado da ULA é zero
 		bool N;	// Indica se o resultado da ULA é negativo
+        bool C; // Indica se o resultado tem carry
 
     public:
         Ula () {
@@ -30,7 +31,7 @@ class Ula { // Unidade Lógica-Aritmética
         	this->N = false;
         }
 
-        ~Ula(void) = default;            
+        ~Ula( void ) = default;            
 
         int executarOperacao( int x, int y, int operacao ); // executa operações binárias
 
@@ -38,10 +39,11 @@ class Ula { // Unidade Lógica-Aritmética
 
         void atualizaNZ( int resultado );
 
-        void imprimeNZ( void ) { 
+        void imprimeNZC( void ) { 
             std::cout << std::boolalpha;
             std::cout << "N: " << N << std::endl;
             std::cout << "Z: " << Z << std::endl;
+            std::cout << "C: " << Z << std::endl;
         }
 
 };

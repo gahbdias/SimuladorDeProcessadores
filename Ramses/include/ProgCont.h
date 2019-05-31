@@ -27,6 +27,8 @@ class ProgCont {
 
   void incrementarPC( void ) { this->leituraAtual++; }
 
+  void incrementarPC( int valor ) { this->leituraAtual = valor + leituraAtual; }
+
   void imprimePC( void ) { std::cout << "PC: " << leituraAtual << std::endl; };
 
 };

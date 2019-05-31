@@ -42,9 +42,7 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
      
       if( PO.RI.opcode == NOP ){
         proximo = 1;
-
-      }
-      else if( (PO.RI.opcode == STA) or (PO.RI.opcode == LDA) or (PO.RI.opcode == ADD) or (PO.RI.opcode == OR) or (PO.RI.opcode == AND) ) { 
+      } else if( (PO.RI.opcode == STA) or (PO.RI.opcode == LDA) or (PO.RI.opcode == ADD) or (PO.RI.opcode == OR) or (PO.RI.opcode == AND) ) { 
         proximo = 3;
 
       } else if( PO.RI.opcode == NOT ) { 
@@ -155,7 +153,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 3: // Instruções de transferência de dados:  LPC; M0(0); LREM; R/W(0); IPC; LRDM;
+  case 3: // Instruções de transferência de dados: LPC; M0(0); LREM; R/W(0); IPC; LRDM;
     std::cout << "### ESTADO 3 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
@@ -164,10 +162,18 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 4: // STA: M0(1); LREM; LRDM(lê acumulador);
+  case 4: // STA: M0(2); LREM; M2(r); M3(0); LRDM(lê r);
     std::cout << "### ESTADO 4 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
-    PO.M.loadRDM( PO.AC.x ); 
+    if( PO.RI.registrador == A ){
+      PO.M.loadRDM( PO.BR.ra.A );
+    } else if( PO.RI.registrador == B ){
+      PO.M.loadRDM( PO.BR.rb.B );
+    } else if ( PO.RI.registrador == X ){
+      PO.M.loadRDM( PO.BR.rx.X );
+    } else if ( PO.RI.registrador == NONE ){ // Instrução do Neander
+      PO.M.loadRDM( PO.BR.ra.A );
+    }     
        
     break;
 
