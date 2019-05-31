@@ -52,47 +52,146 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
   int i=0;
   while( !algorithmFile.eof() and i < 128 ){
  
-    char opcode[3];
-    char registrador;
-    char modoEnd[5];
-    int modo;
-    int endereco=0;
+    std::string opcode;
+    int registrador = NONE;
+    int modo = Dir;
+    int endereco;
     int instrucao;
 
     getline( algorithmFile, line );
     std::stringstream lineStr(line); // string stream para conversão
     
-    lineStr >> opcode >> std::ws; // leia o opcode e descubra o 
+    //lineStr >> opcode >> std::ws; // leia o opcode e descubra o como codificar a instrução
+    //std::cout << opcode;
 
-    if( HTL or NOP or ( NOT and (lineStr.size() < 4) ) ){ // instruçao de 1 byte (NOT do Neander)
+
+    // verificando opcode
+    char ws = ' ';
+    auto nchar = 0u;
+    while( line[nchar] != ws && nchar < line.size() ){
+      opcode.push_back( line[nchar] );
+      nchar++;      
+    }
+    nchar++; // pule caracter em branco
+
+    // verificando se há registrador
+    if( ( line[nchar] == 'A' || line[nchar] == 'B' || line[nchar] == 'X' ) && nchar < line.size() ){
+      // atribua registrador especificado
+      registrador = (line[nchar] == 'A') ? A : (line[nchar] == 'B') ? B : X;    
+      nchar++;
+      
+      nchar++; // pule caracter em branco
+    }
+
+    // verificando se há modo de endereçamento
+    if( line[nchar] == '#'  && nchar < line.size() ) {
+      modo = Ime; // modo de endereçamento imediato
+      nchar++;
+      
+    } else if( line[ line.size() ] == 'I'  && nchar < line.size() ) {
+      modo = Ind; // modo de endereçamento indireto
+ 
+    } else if( line[ line.size() ] == 'X'  && nchar < line.size() ) {
+      modo = Idx; // modo de endereçamento indexado
+ 
+    } 
+
+    if( nchar < line.size() ) {
+      
+    }
     
-      // concatenar outros // condificar
+    //std::cout << nchar << std::endl;
+    std::cout << "opcode: " << opcode << "; reg: " << registrador << "; modo: " << modo << ";\n";
+    //std::cout << endereço << std::endl;
 
+    /*
+    if( (opcode == "HLT") or (opcode == "NOP") or (opcode == "NOT") or (opcode == "NEG") or (opcode == "SHR") ){ // instrução de 1 byte
 
-      this->memoria[i] = strToCode( instrucao );
+      // não há endereço
+      modo = 40; // Modo de endereçamento default 40 ?????????????
+
+      if( (opcode == "HLT") or (opcode == "NOP") ){
+	// não há registrador 
+	registrador = NONE;
+	
+      } else {
+	char reg = line[4];
+
+	if( reg ==  'A' ){
+	  registrador = A;
+	  
+	} else if( reg == 'B' ){
+	  registrador = B;
+	  
+	} else if( reg == 'X' ){
+	  registrador = X;
+	  
+	} else { // NOT do Neander
+	  registrador = A; // registrador default
+
+	}
+	std::cout << " reg lido: " << reg;
+
+      }
+
+      std::cout << " reg atrib: " << registrador;
+      //      this->memoria[i] = strToCode( opcode );
       i++;
+      
+      
+    } else if( (line[4] == 'A') or (line[4] == 'B') or (line[4] == 'X') ){ // intrução de 2 bytes com registrador
+      
+      char reg = line[4];
 
-    } else if( ){ // intrução de 2 bytes do Neander
+	if( reg ==  'A' ){
+	  registrador = A;
+	  
+	} else if( reg == 'B' ){
+	  registrador = B;
+	  
+	} else if( reg == 'X' ){
+	  registrador = X;
+	  
+	}
 
+	std::cout << " reg lido: " << reg;
 
-    } else if( ){ // intrução de 2 bytes que ....
+	std::cout << " reg atrib: " << registrador;
 
+	std::string modoEnd;
+	lineStr >> opcode >> std::ws >> reg >> std::ws >> modoEnd >> std::ws; // leia o modoEnd
+	std::cout << " modo lido: " << modoEnd;
+	
+      if( modoEnd[0] == '#' ) { // verifique primeiro char do endereço
+	modo = Ime; // modo de endereçamento imediato
+	
+      } else if( modoEnd[ modoEnd.size() -1 ]  == 'I' ) { // verifique último char do endereço 
+	modo = Ind; // modo de endereçamento indireto
 
-    } else if( ){ // intrução de 2 bytes que ....
+      } else if( modoEnd[ modoEnd.size() -1 ]  == 'X' ) { // verifique último char do endereço
+	modo = Idx; // modo de endereçamento indexado
 
+      } else {
+	modo = Dir; // modo de endereçamento direto
 
-    }
+      }
 
+      std::cout << " modo atrib: " << modo;
+      
+    } 
+    
+    
+    // condificar instrução
+    instrucao = opcode*10000 + registrador*100+ modo;
 
-
-    //   this->memoria[i] = strToCode( opcode );
-    //   this->memoria[i+1] = endereco;
-
-
-    }
-
-
+    // salvar na memória
+    this->memoria[i] = instrucao;
+    this->memoria[i+1] = endereco;
+     */
+    std::cout << std::endl;
+   
   }
+  
   algorithmFile.close();
 
   // abre os arquivo dados 
@@ -146,11 +245,11 @@ int Memoria::strToCode( const std::string opcode ) {
   if( opcode == "NOP" ){
     return NOP;
 
-  } else if( opcode == "STA" ){
-    return STA;
+  } else if( opcode == "STA" or opcode == "STR" ){
+    return STR;
 
-  } else if( opcode == "LDA" ){
-    return LDA;
+  } else if( opcode == "LDA" or opcode == "LDR" ){
+    return LDR;
 
   } else if( opcode == "ADD" ){
     return ADD;

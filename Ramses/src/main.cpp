@@ -14,7 +14,11 @@
 
 int main ( int argc, char *argv[] ) {
 
+  Memoria memo;
 
+  memo.preencherMemoria( argv[1], argv[2]);
+  
+  /*
 	int estado = 1;
 
 	std::cout << "~ Simulador do NEANDER ~" << std::endl;
@@ -34,7 +38,7 @@ int main ( int argc, char *argv[] ) {
 		UC.fs(estado);
 		estado = UC.fte(estado);
 	}
-
+  */
 	return EXIT_SUCCESS;
 }
 
