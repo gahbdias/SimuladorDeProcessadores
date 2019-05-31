@@ -20,9 +20,9 @@
 
 class Ula { // Unidade Lógica-Aritmética
 
-	public:
-		bool Z; // Indica se o resultado da ULA é zero
-		bool N;	// Indica se o resultado da ULA é negativo
+    public:
+        bool Z; // Indica se o resultado da ULA é zero
+        bool N;	// Indica se o resultado da ULA é negativo
 
     public:
         Ula () {
