@@ -1,7 +1,7 @@
 /**
  * @file Memoria.cpp
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador do Neander
+ * @brief  Simulador do Ramses
  * @version 1.00
  * @date Jun-2019
  * 
@@ -53,26 +53,42 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
   while( !algorithmFile.eof() and i < 128 ){
  
     char opcode[3];
+    char registrador;
+    char modoEnd[5];
+    int modo;
     int endereco=0;
+    int instrucao;
 
     getline( algorithmFile, line );
     std::stringstream lineStr(line); // string stream para conversão
     
+    lineStr >> opcode >> std::ws; // leia o opcode e descubra o 
 
-    if( line.size() <= 4 ){ // instrução de 1 byte
-      
-      lineStr >> opcode >> std::ws;
-      this->memoria[i] = strToCode( opcode );
+    if( HTL or NOP or ( NOT and (lineStr.size() < 4) ) ){ // instruçao de 1 byte (NOT do Neander)
+    
+      // concatenar outros // condificar
 
+
+      this->memoria[i] = strToCode( instrucao );
       i++;
-      
-    } else { // instrução de 2 bytes
-      
-      lineStr >> opcode >> std::ws >> endereco >> std::ws;
-      this->memoria[i] = strToCode( opcode );
-      this->memoria[i+1] = endereco;
 
-      i += 2;      
+    } else if( ){ // intrução de 2 bytes do Neander
+
+
+    } else if( ){ // intrução de 2 bytes que ....
+
+
+    } else if( ){ // intrução de 2 bytes que ....
+
+
+    }
+
+
+
+    //   this->memoria[i] = strToCode( opcode );
+    //   this->memoria[i+1] = endereco;
+
+
     }
 
 

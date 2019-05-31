@@ -25,7 +25,7 @@ class UnidadeControle {
        int proximo; // proximo estado
        Relogio relogio; // clock da unidade de controle
        ParteOperativa PO;
-	     bool fim; // fim da execução
+       bool fim; // fim da execução
 
 
     public:
