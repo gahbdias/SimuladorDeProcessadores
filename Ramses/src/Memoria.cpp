@@ -58,7 +58,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
     bool temEnd = false;
 
     int registrador = NONE;
-    int modo = Dir;
+    int modo = DIRETO;
     int endereco;
     int instrucao;
 
@@ -77,7 +77,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
     // verificando se há registrador
     if( ( line[nchar] == 'A' || line[nchar] == 'B' || line[nchar] == 'X' ) && nchar < line.size() ){
       // atribua registrador especificado
-      registrador = (line[nchar] == 'A') ? A : (line[nchar] == 'B') ? B : X;    
+      registrador = ( line[nchar] == 'A') ? A : (line[nchar] == 'B' ) ? B : X;    
       nchar++;
       
       nchar++; // pule caracter em branco
@@ -85,14 +85,14 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
 
     // verificando se há modo de endereçamento
     if( line[nchar] == '#'  && nchar < line.size() ) {
-      modo = Ime; // modo de endereçamento imediato
+      modo = IMEDIATO; // modo de endereçamento imediato
       nchar++;
       
     } else if( line[ line.size() -1 ] == 'I'  && nchar < line.size() ) {
-      modo = Ind; // modo de endereçamento indireto
+      modo = INDIRETO; // modo de endereçamento indireto
  
     } else if( line[ line.size() - 1 ] == 'X'  && nchar < line.size() ) {
-      modo = Idx; // modo de endereçamento indexado
+      modo = INDEXADO; // modo de endereçamento indexado
  
     } 
 
@@ -138,7 +138,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
     int dado;
 
     getline( dataFile, line );
-    std::stringstream lineStr(line); // string stream para conversão
+    std::stringstream lineStr( line ); // string stream para conversão
     
     lineStr >> dado >> std::ws;
     this->memoria[i] = dado;
@@ -153,7 +153,7 @@ void Memoria::loadREM( int endereco ){
   rem = endereco;
 }
 
-void Memoria::loadRDM( void ){
+void Memoria::loadRDM( void ){ // leitura da memoria ~ endereço de REM, dado para RDM
   rdm = this->memoria[rem];
 }
 

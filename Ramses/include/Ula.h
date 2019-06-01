@@ -29,15 +29,16 @@ class Ula { // Unidade Lógica-Aritmética
         Ula () {
         	this->Z = false;
         	this->N = false;
+            this->C = false;
         }
 
         ~Ula( void ) = default;            
 
         int executarOperacao( int x, int y, int operacao ); // executa operações binárias
 
-        int executarOperacao( int x ); // para operações unárias
+        int executarOperacao( int x, int operacao ); // para operações unárias
 
-        void atualizaNZ( int resultado );
+        void atualizaNZC( int resultado );
 
         void imprimeNZC( void ) { 
             std::cout << std::boolalpha;

@@ -14,16 +14,16 @@
 
 #include <iostream>
 
-#include "RA.h"
-#include "RB.h"
-#include "RX.h"
+#include "RegistradorA.h"
+#include "RegistradorB.h"
+#include "RegistradorX.h"
 
 class BancoRegistradores { // Registrador de intruções
 
 	public:
-	  RA ra; // código da operação
-	  RB rb; // qual registrador será utilizado
-	  RX rx; // modo de enderaçamento
+	  RegistradorA RA; // código da operação
+	  RegistradorB RB; // qual registrador será utilizado
+	  RegistradorX RX; // modo de enderaçamento
 
 	public:
 	  BancoRegistradores( ) { }

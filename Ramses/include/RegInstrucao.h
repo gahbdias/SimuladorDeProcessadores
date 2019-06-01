@@ -41,10 +41,10 @@ enum registradores {
 };
 
 enum modoEnderecamento {
-	Dir = 40,
-	Ind,
-	Ime,
-	Idx // 43
+	DIRETO = 40,
+	INDIRETO,
+	IMEDIATO,
+	INDEXADO // 43
 };
 
 class RegInstrucao { // Registrador de intruções
@@ -62,7 +62,76 @@ class RegInstrucao { // Registrador de intruções
 	  void loadRI( int instrucao );
 
 	  void decodificar( int instrucao );
-	  
+
+	  void imprimeRI( void ) {
+
+		  	switch( opcode ) {
+		  		case NOP:
+		  			std::cout << "RI: NOP(10)" << std::endl;
+		  		break;
+
+		  		case STR:
+		  			std::cout << "RI: STR(11)" << std::endl;
+		  		break;
+
+		  		case LDR:
+		  			std::cout << "RI: LDR(12)" << std::endl;
+		  		break;
+
+		  		case ADD:
+		  			std::cout << "RI: ADD(13)" << std::endl;
+		  		break;
+
+		  		case OR:
+		  			std::cout << "RI: OR(14)" << std::endl;
+		  		break;
+
+		  		case AND:
+		  			std::cout << "RI: AND(15)" << std::endl;
+		  		break;
+
+		  		case SUB:
+		  			std::cout << "RI: SUB(16)" << std::endl;
+		  		break;
+
+		  		case NOT:
+		  			std::cout << "RI: NOT(17)" << std::endl;
+		  		break;
+
+		  		case JMP:
+		  			std::cout << "RI: JMP(18)" << std::endl;
+		  		break;
+
+		  		case JN:
+		  			std::cout << "RI: JN(19)" << std::endl;
+		  		break;
+
+		  		case JZ:
+		  			std::cout << "RI: JZ(20)" << std::endl;
+		  		break;
+
+		  		case JC:
+		  			std::cout << "RI: JC(21)" << std::endl;
+		  		break;
+
+		  		case JSR:
+		  			std::cout << "RI: JSR(22)" << std::endl;
+		  		break;
+
+		  		case NEG:
+		  			std::cout << "RI: NEG(23)" << std::endl;
+		  		break;
+
+		  		case SHR:
+		  			std::cout << "RI: SHR(24)" << std::endl;
+		  		break;
+
+		  		case HLT:
+		  			std::cout << "RI: HLT(25)" << std::endl;
+		  		break;
+
+		  	} 
+	  }	  
 };
 
 

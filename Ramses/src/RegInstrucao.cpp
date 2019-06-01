@@ -22,11 +22,11 @@ void RegInstrucao::decodificar( int instrucao ){
 	for (int i=0; i<3; i++){
 		aux = instrucao%100;
 		codigo[i] = aux;
-		intrucao = (instrucao-aux)/100;
+		instrucao = (instrucao-aux)/100;
 	}
 	
 
 	this->opcode = codigo[2];
-	this->registrador = codigo[1]
+	this->registrador = codigo[1];
 	this->modo = codigo[0];
 }

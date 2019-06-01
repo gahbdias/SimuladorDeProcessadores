@@ -1,5 +1,5 @@
 /**
- * @file RX.h
+ * @file RegistradorX.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
  * @brief  Simulador do Ramses
  * @version 1.00
@@ -15,15 +15,15 @@
 
 #define VAZIO 666
 
-class RX { 
+class RegistradorX { 
 
  public:
   int X; // valor guardado no RX
 
  public:
-  	RX( ){ X = VAZIO; }
+  	RegistradorX( ){ X = VAZIO; }
   
-  	~RX( void ) = default;
+  	~RegistradorX( void ) = default;
   	
   	void loadRX( int valor ) { X = valor; } // carrega o RX com um valor
 
@@ -33,8 +33,7 @@ class RX {
   		} else {
   			std::cout << "RX: " << X << std::endl; 
   		}  		
-  	}
-    
+  	}    
 };
 
 

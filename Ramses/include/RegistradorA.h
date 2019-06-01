@@ -1,5 +1,5 @@
 /**
- * @file RA.h
+ * @file RegistradorA.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
  * @brief  Simulador do Ramses
  * @version 1.00
@@ -15,15 +15,15 @@
 
 #define VAZIO 666
 
-class RA { 
+class RegistradorA { 
 
  public:
   int A; // valor guardado no RA
 
  public:
-  	RA( ){ A = VAZIO; }
+  	RegistradorA( ){ A = VAZIO; }
   
-  	~RA( void ) = default;
+  	~RegistradorA( void ) = default;
   	
   	void loadRA( int valor ) { A = valor; } // carrega o RA com um valor
 

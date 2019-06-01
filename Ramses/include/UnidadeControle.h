@@ -26,7 +26,7 @@ class UnidadeControle {
        Relogio relogio; // clock da unidade de controle
        ParteOperativa PO;
        bool fim; // fim da execução
-
+       int buscasIndireto;
 
     public:
         UnidadeControle ();

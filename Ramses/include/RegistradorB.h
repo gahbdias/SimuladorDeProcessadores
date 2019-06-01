@@ -1,5 +1,5 @@
 /**
- * @file RB.h
+ * @file RegistradorB.h
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
  * @brief  Simulador do Ramses
  * @version 1.00
@@ -15,15 +15,15 @@
 
 #define VAZIO 666
 
-class RB { 
+class RegistradorB { 
 
  public:
   int B; // valor guardado no RB
 
  public:
-  	RB( ){ B = VAZIO; }
+  	RegistradorB( ){ B = VAZIO; }
   
-  	~RB( void ) = default;
+  	~RegistradorB( void ) = default;
   	
   	void loadRB( int valor ) { B = valor; } // carrega o RB com um valor
 

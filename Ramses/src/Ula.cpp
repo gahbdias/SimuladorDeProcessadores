@@ -11,7 +11,7 @@
 
 #include "../include/Ula.h"
 
-int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
+int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, OR, AND, SUB
 
 	int resultado = LIXO;
 
@@ -20,36 +20,61 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, AND, OR
 			resultado = ( x + y );
 		break;
 
-		case AND:
-			resultado = ( x and y );
-		break;
-
 		case OR:
 			resultado = ( x or y );
 		break;
 
+		case AND:
+			resultado = ( x and y );
+		break;
+
+		case SUB:
+			resultado = ( x - y );
+		break;		
+
 		default: 
-			std::cout << "\n### Entrada inválida ULA ###" << std::endl;
+			std::cout << "\n### Entrada inválida ULA BINARIA ###" << std::endl;
 		return LIXO;
 	}
 
-	atualizaNZ( resultado );
+	atualizaNZC( resultado );
 	return resultado;
 }
 
-int Ula::executarOperacao( int x ) { // NOT
+int Ula::executarOperacao( int x, int operacao ) { // NOT, NEG, SHR
 	int resultado = LIXO;
-	resultado = (x*(-1))-1;
-	atualizaNZ( resultado );
+
+	switch( operacao ){
+		case NOT: // TROCA OS BITS, 0101 = 1010
+			resultado = ( x * (-1) )-1;
+		break;
+
+		case NEG:
+			resultado = ( x * (-1) );
+		break;
+
+		case SHR:
+			resultado = ( x = x/2 );
+		break;
+
+		default: 
+			std::cout << "\n### Entrada inválida ULA UNARIA ###" << std::endl;
+		return LIXO;
+	}
+
+	atualizaNZC( resultado );
 	return resultado;
 } 
 
-void Ula::atualizaNZ( int resultado ){
+void Ula::atualizaNZC( int resultado ){
 	if ( resultado == 0 ){
 		this->Z = true;
 	}
 	else if ( resultado < 0 ){
 		this->N = true;
+	}
+	else if ( (resultado > 127) or (resultado < -128) ){ // LIMITE DE 8 BITS
+		this->C = true;
 	}
 }
 
