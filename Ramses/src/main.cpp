@@ -16,8 +16,10 @@ int main ( int argc, char *argv[] ) {
 
   Memoria memo;
 
-  memo.preencherMemoria( argv[1], argv[2]);
+  memo.preencherMemoria( argv[1], argv[2] );
+  memo.imprimeDados(); 
   
+
   /*
 	int estado = 1;
 

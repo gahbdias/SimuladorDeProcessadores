@@ -153,7 +153,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 3: // Instruções de transferência de dados: LPC; M0(0); LREM; R/W(0); IPC; LRDM;
+  case 3: // Instruções de transferência de dados: M0(0); LREM; R/W(0); IPC; LRDM;
     std::cout << "### ESTADO 3 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
@@ -162,47 +162,54 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 4: // STA: M0(2); LREM; M2(r); M3(0); LRDM(lê r);
+  case 4: // STA: M0(2); LREM; - direto
     std::cout << "### ESTADO 4 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
+       
+    break;
+
+  case 5: // STA: M2(r); M3(0); LRDM(lê r); - direto
+    std::cout << "### ESTADO 5 ###" << std::endl;
+
     if( PO.RI.registrador == A ){
       PO.M.loadRDM( PO.BR.ra.A );
     } else if( PO.RI.registrador == B ){
       PO.M.loadRDM( PO.BR.rb.B );
     } else if ( PO.RI.registrador == X ){
       PO.M.loadRDM( PO.BR.rx.X );
-    } else if ( PO.RI.registrador == NONE ){ // Instrução do Neander
-      PO.M.loadRDM( PO.BR.ra.A );
     }     
-       
     break;
 
-  case 5: // STA: R/W(1); (escreve dado no rdm no endereço do rem)
-    std::cout << "### ESTADO 5 ###" << std::endl;
+  case 6: // STA: R/W(1); (escreve dado no rdm no endereço do rem) - direto
+    std::cout << "### ESTADO 6 ###" << std::endl;
     PO.M.escreverRegistro();
       
     break;
 
-  case 6: // LDA:  M0(1); LREM; R/W(0); LRDM;
-    std::cout << "### ESTADO 6 ###" << std::endl;
-    PO.M.loadREM( PO.M.rdm );
-    PO.M.loadRDM();
-    
-    break;
-
-  case 7: // LDA: M1(1); LAC; (atualiza N e Z)
+  case 7: // STA:  M0(2); LREM; R/W(0); LRDM; - indireto
     std::cout << "### ESTADO 7 ###" << std::endl;
-    PO.AC.loadAC( PO.M.rdm );
-    PO.ULA.atualizaNZ( PO.AC.x );
+    PO.M.loadREM( PO.M.rdm );
+    PO.M.loadRDM();
     
     break;
 
-  case 8: // ULA: M0(1); LREM; R/W(0); LRDM;
+  case 8: // STA: M0(0); LREM; IPC; - imediato 
     std::cout << "### ESTADO 8 ###" << std::endl;
-    PO.M.loadREM( PO.M.rdm );
-    PO.M.loadRDM();
-		
+     PO.M.loadREM( PO.M.rdm );
+     PO.PC.incrementarPC();
+
     break;
+
+    //////////////////////////
+
+  case 9: // SUM; M0(1); LREM; [soma de ponteiros]
+    std::cout << "### ESTADO 9 ###" << std::endl;
+    		
+    break;
+
+
+
+
 
   case 9: // ULA: SULA(op); (atualiza N e Z); M1(0); LAC;
     std::cout << "### ESTADO 9 ###" << std::endl;
