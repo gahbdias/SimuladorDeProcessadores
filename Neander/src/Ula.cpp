@@ -47,9 +47,14 @@ int Ula::executarOperacao( int x ) { // NOT
 void Ula::atualizaNZ( int resultado ){
 	if ( resultado == 0 ){
 		this->Z = true;
+	} else {
+		this->Z = false;
 	}
-	else if ( resultado < 0 ){
+	
+	if ( resultado < 0 ){
 		this->N = true;
+	} else {
+		this->N = false;
 	}
 }
 
