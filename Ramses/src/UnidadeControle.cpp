@@ -373,62 +373,76 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
   case 14: // JMP / JN / JZ / JC (TRUE): M0(0); LREM; R/W(0); LRDM; - DIRETO
     std::cout << "### ESTADO 14 ###" << std::endl;
-
+    PO.M.loadREM( PO.PC.leituraAtual );
+    PO.M.loadRDM();
+    relogio.clockMemoria();
 
     break;
 
   case 15: // JMP / JN / JZ / JC (TRUE): M1(0); LPC; - DIRETO
     std::cout << "### ESTADO 15 ###" << std::endl;
-
+    PO.PC.loadPC( PO.M.rdm );
+    relogio.clockLA();
 
     break;
 
   case 16: // JMP / JN / JZ / JC (TRUE): IPC; - IMEDIATO
     std::cout << "### ESTADO 16 ###" << std::endl;
     //PO.
+    PO.PC.incrementarPC();
+    relogio.clockLA();
 
     break;
 
   case 17: // JMP / JN / JZ / JC (TRUE): SUM; M1(1); LPC; [soma de ponteiros] - INDEXADO
     std::cout << "### ESTADO 17 ###" << std::endl;
-
+    PO.PC.loadPC( PO.SUM.somarIndice( PO.BR.RX.X, PO.M.rdm ) );
+    relogio.clockLA();
 
     break;
 
-  case 18: // R/W(1) [em temp];
+  case 18: // JSR: R/W(1) [em temp]; - DIRETO
     std::cout << "### ESTADO 18 ###" << std::endl;
     PO.M.temp = PO.M.rdm;
+    relogio.clockMemoria();
 
     break;
 
-  case 19: // 
+  case 19: // JSR: LREM(temp); - DIRETO
     std::cout << "### ESTADO 19 ###" << std::endl;
     PO.M.loadREM( PO.M.temp );
-
+    relogio.clockMemoria();
     break;
 
-  case 20: // 
+  case 20: // JSR: M3(1); LRDM; - DIRETO
     std::cout << "### ESTADO 20 ###" << std::endl;
-
+    PO.M.loadRDM( PO.PC.leituraAtual );
+    relogio.clockLA();
 
     break;
 
-  case 21: // 
+  case 21: // JSR: R/W(1); [escreve no endereço que estava guardado em temp] M1(2); LPC; IPC; - DIRETO
     std::cout << "### ESTADO 21 ###" << std::endl;
-
+    PO.M.escreverRegistro();
+    PO.PC.loadPC( PO.M.rem );
+    PO.PC.incrementarPC();
+    relogio.clockMemoria();
 
     break;
 
-  case 22: // 
+  case 22: // JSR: SUM; R/W(1);  [em temp] - INDEXADO
     std::cout << "### ESTADO 22 ###" << std::endl;
-
+    PO.M.temp = PO.SUM.somarIndice( PO.BR.RX.X, PO.M.rdm );
+    relogio.clockMemoria();
 
     break;
 
-  case 23: // 
+  case 23: // STR:  M0(2); LREM; R/W(0); LRDM; - INDIRETO (cópia do 7; usado para simplificar diagrama de estados)
     std::cout << "### ESTADO 23 ###" << std::endl;
-
-
+    PO.M.loadREM( PO.M.rdm );
+    PO.M.loadRDM();
+    relogio.clockMemoria();
+ 
     break;
 
   default: std::cout << "\n### Entrada inválida fs ###" << std::endl;

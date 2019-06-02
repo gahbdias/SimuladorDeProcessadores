@@ -1,7 +1,7 @@
 /**
  * @file Ula.cpp
  * @authors Karine Piacentini Coelho, Gabriela Carvalho Dias.
- * @brief  Simulador do Neander
+ * @brief  Simulador do Ramses
  * @version 1.00
  * @date Jun-2019
  * 
@@ -37,7 +37,9 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, OR, AND, SUB
 		return LIXO;
 	}
 
-	atualizaNZC( resultado );
+	atualizaNZC( resultado ); // verifique se o resultado é negativo, zero ou houve overflow
+
+	resultado = resultado%10000; // guarde apenas 4 digitos no caso de overflow
 	return resultado;
 }
 
@@ -62,20 +64,32 @@ int Ula::executarOperacao( int x, int operacao ) { // NOT, NEG, SHR
 		return LIXO;
 	}
 
-	atualizaNZC( resultado );
+	atualizaNZC( resultado ); // verifique se o resultado é negativo, zero ou houve overflow
+
+	resultado = resultado%10000; // guarde apenas 4 digitos no caso de overflow
 	return resultado;
 } 
 
 void Ula::atualizaNZC( int resultado ){
+
 	if ( resultado == 0 ){
-		this->Z = true;
+	  this->Z = true;
+	} else {
+	  this->Z = false;
 	}
-	else if ( resultado < 0 ){
-		this->N = true;
+	
+	if ( resultado < 0 ){
+	  this->N = true;
+	} else {
+	  this->N = false;
 	}
-	else if ( (resultado > 127) or (resultado < -128) ){ // LIMITE DE 8 BITS
-		this->C = true;
+
+	if ( resultado/10000 != 0  ){ // LIMITE DE 8 BITS (4 DÍGITOS)
+	  this->C = true;
+	} else {
+	  this->C = false;
 	}
+
 }
 
 

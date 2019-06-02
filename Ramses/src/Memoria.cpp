@@ -21,11 +21,16 @@ void Memoria::imprimeDados (){
   std::cout << "REM: " << rem << std::endl;
 
   for( int i=0; i<256; i++ ){
-    if( memoria[i] != LIXO and memoria[i] < 256 ){
+    if(  memoria[i] < 256 and i < 128 and memoria[i] != LIXO ){ // area de instruções: endereço
       std::cout << "Memoria[" << i << "]: " << memoria[i] << std::endl;
-    } else if( memoria[i] != LIXO ){
+
+    } else if( i < 128 and memoria[i] != LIXO ){ // area de instruções: palavra de instrução
       codeToStr( memoria[i], &opcode, &registrador, &modo);
-      std::cout << "Memoria[" << i << "]: " << opcode << ", " << registrador << ", " << modo << std::endl;
+      std::cout << "Memoria[" << i << "]: " << opcode << ", " << registrador << ", " << modo << std::endl;      
+
+    } else if( memoria[i] != LIXO ){ // area de dados
+      std::cout << "Memoria[" << i << "]: " << memoria[i] << std::endl;
+
     }
   }
 }
@@ -110,6 +115,8 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
       nchar++;
       
       nchar++; // pule caracter em branco
+    } else if( (opcode != "HLT") and (opcode != "NOP") and (opcode != "JMP") and (opcode != "JN") and (opcode != "JZ") and (opcode != "JC")  ){ // verificando se tem registrador default (comandos neander)
+      registrador = A;
     }
 
     // verificando se há modo de endereçamento
@@ -166,19 +173,101 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
 
   i=128;
   while( !dataFile.eof() and i < 256 ){
-    int dado;
+    long int dado;
 
     getline( dataFile, line );
     std::stringstream lineStr( line ); // string stream para conversão
     
     lineStr >> dado >> std::ws;
-    this->memoria[i] = dado;
-    
-    i++;
+    // se o numero for maior que 8 bits (tiver mais que 4 digitos), guarde o byte mais significativo primeiro (guarde os 4 digitos mais significativos primeiro)
+    // e o byte menos significativo em seguida (guarde os 4 digitos menos significativos em seguida)
+    // obs: estamos simulando uma memória que consegue guardar só 8 bits
+    // como um int cabe até 5 digitos, usaremos o limite de 4 digitos
+    if( dado/10000 != 0 ){
+      //std::cout << "dado: " << dado << " memo l1: " << (int) dado/10000 << " memo l2: " << (int) dado%10000 << std::endl;
+
+      this->memoria[i] = (int) dado/10000; // 8 digitos mais significativos 
+      this->memoria[i+1] = (int) dado%10000; // 8 digitos menos significativos
+      //std::cout << "\n\ni: " << i << " memo li: " << this->memoria[i] << " memo li+1: " << this->memoria[i+1] << std::endl;
+	// ande na memória
+	i+=2;
+
+    } else{ 
+      this->memoria[i] = (int) dado; // numéro de até 8 digitos
+
+      // ande na memória
+      i++;
+    }
+    //std::cout << "i: " << i << std::endl;
   }
 
   dataFile.close();
+
+
+  /*
+  //Principio da simulação feita:
+  // Na memória só cabe um número de 2 digitos e quero poder somar númerode de até 4 digitos
+  dado1 = 160;
+  [128] 1
+  [129] 60
+
+  dado2 = 260;
+  [130] 2
+  [131] 60
+
+  // LDR A 129
+  // ADD A 131
+
+  60 + 60 = 120;
+  carry = 1
+
+  // STR A 133
+  [133] 20
+
+  // LDR A #1
+  // JC 12
+  // LDR A #0
+  // fez o load do carry 1 e pulou para o add
+
+  // ADD A 128
+  1 + 1 = 2
+	
+  // ADD A 130
+  2 + 2 = 4
+
+  // STR A 132
+  [132] 4
+
+  // resultado
+  [132] 4
+  [133] 20
+  // 420!! :)
+
+  /////////////////
+  dado1 = 1001
+  [128] 10
+  [129] 01 // 9
+
+  dado2 = 111;
+  [130] 01
+  [131] 10  // 6
+	
+  10 + 01 = 11
+  [133] 00
+
+  C=1
+
+  10 + 01 = 11
+  11 + 01 = 00
+  [132] 00
+
+  10000 // 16
+
+  */
+
 }
+
+
 
 void Memoria::loadREM( int endereco ){
   rem = endereco;
@@ -193,7 +282,7 @@ void Memoria::loadRDM( int valor ){
 }
 
 void Memoria::escreverRegistro( void ){
-	this->memoria[rem] = rdm;
+  this->memoria[rem] = rdm;
 }
 
 

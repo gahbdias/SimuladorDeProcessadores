@@ -23,13 +23,13 @@ class Ula { // Unidade Lógica-Aritmética
 	public:
 		bool Z; // Indica se o resultado da ULA é zero
 		bool N;	// Indica se o resultado da ULA é negativo
-        bool C; // Indica se o resultado tem carry
+		bool C; // Indica se o resultado tem carry
 
     public:
         Ula () {
         	this->Z = false;
         	this->N = false;
-            this->C = false;
+		this->C = false;
         }
 
         ~Ula( void ) = default;            
@@ -44,7 +44,7 @@ class Ula { // Unidade Lógica-Aritmética
             std::cout << std::boolalpha;
             std::cout << "N: " << N << std::endl;
             std::cout << "Z: " << Z << std::endl;
-            std::cout << "C: " << Z << std::endl;
+            std::cout << "C: " << C << std::endl;
         }
 
 };
