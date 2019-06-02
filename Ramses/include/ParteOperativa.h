@@ -27,6 +27,7 @@ class ParteOperativa {
     	BancoRegistradores BR;
     	ProgCont PC; // apontador de programa
     	RegInstrucao RI; // registrador de instruções
+	SomadorPonteiros SUM; // Somador de Ponteiros - para o modo indexado
 
     public:
         ParteOperativa ();

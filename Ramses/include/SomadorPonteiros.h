@@ -21,9 +21,9 @@ class SomadorPonteiros { // Somador de Ponteiros - para o modo indexado
 
         ~SomadorPonteiros( void ) = default;            
 
-        void somarIndice( int x, int rdm, int* saida ){ 
+        int somarIndice( int x, int rdm ){ 
             // Soma o indice de RX ao dado de RDM (que será um endereço) e coloca o resultado em REM ou PC
-            *saida = rdm + x;
+            return rdm + x;
         } 
 
 };

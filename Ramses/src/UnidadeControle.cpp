@@ -308,26 +308,28 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
   case 8: // STR: M0(0); LREM; IPC; - imediato 
     std::cout << "### ESTADO 8 ###" << std::endl;
-     PO.M.loadREM( PO.M.rdm );
-     PO.PC.incrementarPC();
+    PO.M.loadREM( PO.PC.leituraAtual );
+    PO.PC.incrementarPC();
+    relogio.clockLA();
 
     break;
 
-    //////////////////////////
-
-  case 9: // SUM; M0(1); LREM; [soma de ponteiros]
+  case 9: // STR: SUM; M0(1); LREM [da SUM]; [soma de ponteiros] - indexado
     std::cout << "### ESTADO 9 ###" << std::endl;
-    		
+    PO.M.loadREM( PO.SUM.somarIndice( PO.BR.RX, PO.M.rdm ) );
+    relogio.clockLA();
+		
     break;
 
-  case 9999: // ULA: SULA(op); (atualiza N e Z); M1(0); LAC;
-    std::cout << "### ESTADO 9 ###" << std::endl;
-  
-
+    
+  case 10: // LDR: 
+    std::cout << "### ESTADO 10 ###" << std::endl;
 
     break;
 
-  case 10: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
+//////////////////////////
+
+  case 19999: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
     std::cout << "### ESTADO 10 ###" << std::endl;
 
     break;
