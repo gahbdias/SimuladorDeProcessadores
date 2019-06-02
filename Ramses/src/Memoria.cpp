@@ -184,11 +184,10 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
     // obs: estamos simulando uma memória que consegue guardar só 8 bits
     // como um int cabe até 5 digitos, usaremos o limite de 4 digitos
     if( dado/10000 != 0 ){
-      //std::cout << "dado: " << dado << " memo l1: " << (int) dado/10000 << " memo l2: " << (int) dado%10000 << std::endl;
-
+      
       this->memoria[i] = (int) dado/10000; // 8 digitos mais significativos 
       this->memoria[i+1] = (int) dado%10000; // 8 digitos menos significativos
-      //std::cout << "\n\ni: " << i << " memo li: " << this->memoria[i] << " memo li+1: " << this->memoria[i+1] << std::endl;
+      
 	// ande na memória
 	i+=2;
 
@@ -198,7 +197,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
       // ande na memória
       i++;
     }
-    //std::cout << "i: " << i << std::endl;
+    
   }
 
   dataFile.close();

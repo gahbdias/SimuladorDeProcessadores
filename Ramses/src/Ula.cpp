@@ -37,7 +37,7 @@ int Ula::executarOperacao( int x, int y, int operacao ) { // ADD, OR, AND, SUB
 		return LIXO;
 	}
 
-	atualizaNZC( resultado ); // verifique se o resultado é negativo, zero ou houve overflow
+	atualizaNZC( resultado, operacao ); // verifique se o resultado é negativo, zero ou houve overflow
 
 	resultado = resultado%10000; // guarde apenas 4 digitos no caso de overflow
 	return resultado;
@@ -64,13 +64,13 @@ int Ula::executarOperacao( int x, int operacao ) { // NOT, NEG, SHR
 		return LIXO;
 	}
 
-	atualizaNZC( resultado ); // verifique se o resultado é negativo, zero ou houve overflow
+	atualizaNZC( resultado, operacao ); // verifique se o resultado é negativo, zero ou houve overflow
 
 	resultado = resultado%10000; // guarde apenas 4 digitos no caso de overflow
 	return resultado;
 } 
 
-void Ula::atualizaNZC( int resultado ){
+void Ula::atualizaNZC( int resultado, int operacao ){
 
 	if ( resultado == 0 ){
 	  this->Z = true;
@@ -84,11 +84,30 @@ void Ula::atualizaNZC( int resultado ){
 	  this->N = false;
 	}
 
-	if ( resultado/10000 != 0  ){ // LIMITE DE 8 BITS (4 DÍGITOS)
-	  this->C = true;
-	} else {
-	  this->C = false;
+	// operações que atualizam o carrry: ADD, SUB, NEG e SHR
+	if( operacao == ADD or operacao == NEG ) {
+	  if ( resultado/10000 != 0  ){ // LIMITE DE 8 BITS (4 DÍGITOS)
+	    this->C = true;
+	  } else {
+	    this->C = false;
+	  }
+
+	} else if( operacao == SUB ) {
+	  if ( resultado/10000 != 0  ){ // LIMITE DE 8 BITS (4 DÍGITOS)
+	    this->C = false;
+	  } else {
+	    this->C = true;
+	  }
+
+	} else if( operacao == SHR ) {
+	  if ( resultado%2 == 0 ){ // se numero for par guarde o bit mais significativo do binário
+	    this->C = true;
+	  } else {
+	    this->C = false;
+	  }
+
 	}
+
 
 }
 

@@ -38,7 +38,7 @@ class Ula { // Unidade Lógica-Aritmética
 
         int executarOperacao( int x, int operacao ); // para operações unárias
 
-        void atualizaNZC( int resultado );
+        void atualizaNZC( int resultado, int opcode );
 
         void imprimeNZC( void ) { 
             std::cout << std::boolalpha;

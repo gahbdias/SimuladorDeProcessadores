@@ -326,13 +326,13 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 10 ###" << std::endl;
     if( PO.RI.registrador == A ) {
       PO.BR.RA.loadRA ( PO.M.rdm );
-      PO.ULA.atualizaNZC( PO.BR.RA.A );
+      PO.ULA.atualizaNZC( PO.BR.RA.A, PO.RI.opcode );
     } else if( PO.RI.registrador == B ) {
       PO.BR.RB.loadRB ( PO.M.rdm );
-      PO.ULA.atualizaNZC( PO.BR.RB.B );
+      PO.ULA.atualizaNZC( PO.BR.RB.B, PO.RI.opcode );
     } else if ( PO.RI.registrador == X ) {
       PO.BR.RX.loadRX ( PO.M.rdm );
-      PO.ULA.atualizaNZC( PO.BR.RX.X );
+      PO.ULA.atualizaNZC( PO.BR.RX.X, PO.RI.opcode );
     }
     relogio.clockLA();
 
