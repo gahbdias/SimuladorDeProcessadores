@@ -150,6 +150,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 2: // Decodificação: LRI; Decodificação; 
     std::cout << "### ESTADO 2 ###" << std::endl;
     PO.RI.loadRI( PO.M.rdm );
+    relogio.clockLA();
     
     break;
 
@@ -166,6 +167,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 4 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     PO.M.loadRDM( PO.AC.x ); 
+    relogio.clockLA();
        
     break;
 
@@ -188,6 +190,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 7 ###" << std::endl;
     PO.AC.loadAC( PO.M.rdm );
     PO.ULA.atualizaNZ( PO.AC.x );
+    relogio.clockLA();
     
     break;
 
@@ -195,6 +198,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     std::cout << "### ESTADO 8 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     PO.M.loadRDM();
+    relogio.clockMemoria();
 		
     break;
 
@@ -212,7 +216,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
     break;
 
-  case 11: // JUMP, JN && N=1, JZ && Z=1: LPC; M0(0); LREM; R/W(0); LRDM; LPC;
+  case 11: // JUMP, JN && N=1, JZ && Z=1: M0(0); LREM; R/W(0); LRDM; LPC;
     std::cout << "### ESTADO 11 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
@@ -224,6 +228,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 12: // JN && N=0, JZ && Z=0: IPC
     std::cout << "### ESTADO 12 ###" << std::endl;
     PO.PC.incrementarPC();
+    relogio.clockLA();
 			
     break;
 

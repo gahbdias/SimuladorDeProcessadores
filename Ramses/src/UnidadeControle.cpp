@@ -34,9 +34,9 @@ void UnidadeControle::imprimeEstado( void ){
 int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ define qual será o próximo estado
 
   bool isUla = ( ( PO.RI.opcode == ADD ) or 
-               ( PO.RI.opcode == SUB ) or
-               ( PO.RI.opcode == AND ) or
-               ( PO.RI.opcode == OR  ) );
+                 ( PO.RI.opcode == SUB ) or
+                 ( PO.RI.opcode == AND ) or
+                 ( PO.RI.opcode == OR  ) );
 
   switch( atual ){
 
@@ -47,7 +47,7 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
 
     case 2:
      
-      if ( (PO.RI.opcode == NOT) or (PO.RI.opcode == NEG) or (PO.RI.opcode == SHR) ){
+      if ( ( PO.RI.opcode == NOT ) or ( PO.RI.opcode == NEG ) or ( PO.RI.opcode == SHR ) ){
         proximo = 13;
       } else if ( ( PO.RI.opcode == JN and PO.ULA.N == false ) or 
                   ( PO.RI.opcode == JZ and PO.ULA.Z == false ) or 
@@ -65,7 +65,7 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
                   ( PO.RI.opcode == JC and PO.ULA.C == true ) or 
                   ( PO.RI.opcode == JMP ) ) {
         proximo = 14;
-      } else if ( (PO.RI.opcode == NOP) ) { 
+      } else if ( PO.RI.opcode == NOP ) { 
         proximo = 1;
       } else if ( PO.RI.opcode == HLT ) { 
         fim = true;
@@ -89,12 +89,21 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
                   ( ( PO.RI.opcode == STR ) or 
                     ( PO.RI.opcode == LDR ) or 
                     ( isUla ) ) ) {
-        
-      } else if ( isUla ) {
-        
-      } else if ( isUla ) {
-        
-      }   
+        proximo = 9;
+      } else if ( ( PO.RI.modo == IMEDIATO ) and ( PO.RI.opcode == STR ) ) {
+        proximo = 8;
+      } else if ( ( PO.RI.modo == DIRETO ) and ( PO.RI.opcode == STR ) ) {
+        proximo = 4;
+      } else if ( ( PO.RI.modo == DIRETO ) and  ( PO.RI.opcode == JSR ) ) {
+        proximo = 18;
+      } else if ( ( PO.RI.modo == INDEXADO ) and  ( PO.RI.opcode == JSR ) ) {
+        proximo = 22;
+      } else if ( ( PO.RI.opcode == JN and PO.ULA.N == true ) or 
+                  ( PO.RI.opcode == JZ and PO.ULA.Z == true ) or 
+                  ( PO.RI.opcode == JC and PO.ULA.C == true ) or
+                  ( PO.RI.opcode == JMP) ) { 
+        proximo = 15;
+      }
 
     break;
 
@@ -114,8 +123,19 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
     break;
 
     case 7:
-      proximo = 4;
-    
+
+      if ( ( PO.RI.modo == DIRETO ) and ( isUla ) ) {
+        proximo = 12;
+      } else if ( ( PO.RI.modo == DIRETO ) and ( PO.RI.opcode == LDR ) ){
+        proximo = 10;
+      } else if ( PO.RI.opcode == JSR ){
+        proximo = 18;
+      } else if ( PO.RI.opcode == STR ){
+        proximo = 4;
+      }  else if ( PO.RI.opcode == LDR or isUla ) {
+        proximo = 23;
+      }
+
     break;
 
     case 8:
@@ -124,22 +144,95 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
     break;
 
     case 9:	
-      proximo = 5;
+      if ( PO.RI.opcode == STR ) {
+        proximo = 5;
+      } else if ( PO.RI.opcode == LDR or isUla ){
+        proximo = 11;
+      }
     
     break;
 
     case 10:
-      proximo = 11;
+      proximo = 1;
     
     break;
 
     case 11:
-      proximo = 1;
+      if ( PO.RI.opcode == LDR ) {
+        proximo = 10;
+      } else if ( isUla ) {
+        proximo = 12;
+      }
     
     break;
 
     case 12:
       proximo = 1;
+    
+    break;
+
+    case 13:
+      proximo = 1;
+    
+    break;
+
+    case 14:
+      if( PO.RI.modo == DIRETO ){
+        proximo = 15;
+      } else if( PO.RI.modo == INDIRETO ) {
+        proximo = 7;
+      } else if( PO.RI.modo == INDEXADO ) {
+        proximo = 17;
+      }
+    
+    break;
+
+    case 15:
+      proximo = 1;
+    
+    break;
+
+    case 16:
+      proximo = 1;
+    
+    break;
+
+    case 17:
+      proximo = 1;
+    
+    break;
+
+    case 18:
+      proximo = 19;
+    
+    break;
+
+    case 19:
+      proximo = 20;
+    
+    break;
+
+    case 20:
+      proximo = 21;
+    
+    break;
+
+    case 21:
+      proximo = 1;
+    
+    break;
+
+    case 22:
+      proximo = 19;
+    
+    break;
+
+    case 23:
+      if ( PO.RI.opcode == LDR ){
+        proximo = 10;
+      } else if ( isUla ){
+        proximo = 12;
+      }
     
     break;
 
@@ -153,7 +246,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
   switch( atual ){
 
-  case 1: // Busca: LPC; M0(0); LREM; R/W(0); IPC; LRDM;
+  case 1: // Busca: M0(0); LREM; R/W(0); IPC; LRDM;
     std::cout << "### ESTADO 1 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.M.loadRDM();
@@ -165,6 +258,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
   case 2: // Decodificação: LRI; Decodificação; 
     std::cout << "### ESTADO 2 ###" << std::endl;
     PO.RI.loadRI( PO.M.rdm );
+    relogio.clockLA();
     
     break;
 
@@ -177,38 +271,42 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 4: // STA: M0(2); LREM; - direto
+  case 4: // STR: M0(2); LREM; - direto
     std::cout << "### ESTADO 4 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
+    relogio.clockLA();
        
     break;
 
-  case 5: // STA: M2(r); M3(0); LRDM(lê r); - direto
+  case 5: // STR: M2(r); M3(0); LRDM(lê r); - direto
     std::cout << "### ESTADO 5 ###" << std::endl;
-
     if( PO.RI.registrador == A ){
       PO.M.loadRDM( PO.BR.RA.A );
     } else if( PO.RI.registrador == B ){
       PO.M.loadRDM( PO.BR.RB.B );
     } else if ( PO.RI.registrador == X ){
       PO.M.loadRDM( PO.BR.RX.X );
-    }     
+    }
+    relogio.clockLA();
+
     break;
 
-  case 6: // STA: R/W(1); (escreve dado no rdm no endereço do rem) - direto
+  case 6: // STR: R/W(1); (escreve dado no rdm no endereço do rem) - direto
     std::cout << "### ESTADO 6 ###" << std::endl;
     PO.M.escreverRegistro();
+    relogio.clockMemoria();
       
     break;
 
-  case 7: // STA:  M0(2); LREM; R/W(0); LRDM; - indireto
+  case 7: // STR:  M0(2); LREM; R/W(0); LRDM; - indireto
     std::cout << "### ESTADO 7 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     PO.M.loadRDM();
+    relogio.clockMemoria();
     
     break;
 
-  case 8: // STA: M0(0); LREM; IPC; - imediato 
+  case 8: // STR: M0(0); LREM; IPC; - imediato 
     std::cout << "### ESTADO 8 ###" << std::endl;
      PO.M.loadREM( PO.M.rdm );
      PO.PC.incrementarPC();
