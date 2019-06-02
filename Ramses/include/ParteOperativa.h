@@ -18,6 +18,7 @@
 #include "BancoRegistradores.h"
 #include "ProgCont.h"
 #include "RegInstrucao.h"
+#include "SomadorPonteiros.h"
 
 class ParteOperativa {
 
@@ -26,8 +27,8 @@ class ParteOperativa {
     	Ula ULA; // unidade lógica aritmética
     	BancoRegistradores BR;
     	ProgCont PC; // apontador de programa
-    	RegInstrucao RI; // registrador de instruções
-	SomadorPonteiros SUM; // Somador de Ponteiros - para o modo indexado
+        RegInstrucao RI; // registrador de instruções
+	    SomadorPonteiros SUM; // Somador de Ponteiros - para o modo indexado
 
     public:
         ParteOperativa ();

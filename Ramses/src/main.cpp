@@ -14,17 +14,11 @@
 
 int main ( int argc, char *argv[] ) {
 
-  Memoria memo;
-
-  memo.preencherMemoria( argv[1], argv[2] );
-  memo.imprimeDados(); 
-  
-
-  /*
 	int estado = 1;
 
-	std::cout << "~ Simulador do NEANDER ~" << std::endl;
+	std::cout << "### SIMULADOR do RAMSES ###" << std::endl;
 	std::cout << "Iniciando..." << std::endl;
+	std::cout << std::endl;
 
 	if( argc < 3 ){
 		return EXIT_FAILURE;
@@ -40,7 +34,7 @@ int main ( int argc, char *argv[] ) {
 		UC.fs(estado);
 		estado = UC.fte(estado);
 	}
-  */
-	return EXIT_SUCCESS;
+  	return EXIT_SUCCESS;
+
 }
 

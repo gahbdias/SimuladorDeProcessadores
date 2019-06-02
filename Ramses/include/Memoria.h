@@ -49,6 +49,8 @@ public:
 
   void imprimeDados();
 
+  void codeToStr( int instrucao, std::string* opcode, std::string* registrador, std::string* modo);
+
 };
 
 #endif

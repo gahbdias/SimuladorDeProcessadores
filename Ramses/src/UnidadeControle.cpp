@@ -69,6 +69,8 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
         proximo = 1;
       } else if ( PO.RI.opcode == HLT ) { 
         fim = true;
+      } else if ( ( PO.RI.modo == IMEDIATO ) and ( PO.RI.opcode == STR ) ) {
+        proximo = 8;
       } else {
         proximo = 3;
       }
@@ -90,8 +92,6 @@ int UnidadeControle::fte( int atual ){ // Função de Transição de Estados ~ d
                     ( PO.RI.opcode == LDR ) or 
                     ( isUla ) ) ) {
         proximo = 9;
-      } else if ( ( PO.RI.modo == IMEDIATO ) and ( PO.RI.opcode == STR ) ) {
-        proximo = 8;
       } else if ( ( PO.RI.modo == DIRETO ) and ( PO.RI.opcode == STR ) ) {
         proximo = 4;
       } else if ( ( PO.RI.modo == DIRETO ) and  ( PO.RI.opcode == JSR ) ) {
@@ -271,14 +271,14 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 4: // STR: M0(2); LREM; - direto
+  case 4: // STR: M0(2); LREM; - DIRETO
     std::cout << "### ESTADO 4 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     relogio.clockLA();
        
     break;
 
-  case 5: // STR: M2(r); M3(0); LRDM(lê r); - direto
+  case 5: // STR: M2(r); M3(0); LRDM(lê r); - DIRETO
     std::cout << "### ESTADO 5 ###" << std::endl;
     if( PO.RI.registrador == A ){
       PO.M.loadRDM( PO.BR.RA.A );
@@ -291,14 +291,14 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
     break;
 
-  case 6: // STR: R/W(1); (escreve dado no rdm no endereço do rem) - direto
+  case 6: // STR: R/W(1); (escreve dado no rdm no endereço do rem) - DIRETO
     std::cout << "### ESTADO 6 ###" << std::endl;
     PO.M.escreverRegistro();
     relogio.clockMemoria();
       
     break;
 
-  case 7: // STR:  M0(2); LREM; R/W(0); LRDM; - indireto
+  case 7: // STR:  M0(2); LREM; R/W(0); LRDM; - INDIRETO
     std::cout << "### ESTADO 7 ###" << std::endl;
     PO.M.loadREM( PO.M.rdm );
     PO.M.loadRDM();
@@ -306,7 +306,7 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
     
     break;
 
-  case 8: // STR: M0(0); LREM; IPC; - imediato 
+  case 8: // STR: M0(0); LREM; IPC; - IMEDIATO 
     std::cout << "### ESTADO 8 ###" << std::endl;
     PO.M.loadREM( PO.PC.leituraAtual );
     PO.PC.incrementarPC();
@@ -314,35 +314,38 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
 
     break;
 
-  case 9: // STR: SUM; M0(1); LREM [da SUM]; [soma de ponteiros] - indexado
+  case 9: // STR: SUM; M0(1); LREM [da SUM]; [soma de ponteiros] - INDEXADO
     std::cout << "### ESTADO 9 ###" << std::endl;
-    PO.M.loadREM( PO.SUM.somarIndice( PO.BR.RX, PO.M.rdm ) );
+    PO.M.loadREM( PO.SUM.somarIndice( PO.BR.RX.X, PO.M.rdm ) );
     relogio.clockLA();
 		
     break;
 
     
-  case 10: // LDR: 
+  case 10: // LDR: Lr [do RDM]; (atualiza N e Z) - DIRETO
     std::cout << "### ESTADO 10 ###" << std::endl;
+    if( PO.RI.registrador == A ) {
+      PO.BR.RA.loadRA ( PO.M.rdm );
+      PO.ULA.atualizaNZC( PO.BR.RA.A );
+    } else if( PO.RI.registrador == B ) {
+      PO.BR.RB.loadRB ( PO.M.rdm );
+      PO.ULA.atualizaNZC( PO.BR.RB.B );
+    } else if ( PO.RI.registrador == X ) {
+      PO.BR.RX.loadRX ( PO.M.rdm );
+      PO.ULA.atualizaNZC( PO.BR.RX.X );
+    }
+    relogio.clockLA();
 
     break;
 
-//////////////////////////
-
-  case 19999: // NEGAÇÃO: ULA(NOT); M1(0); LAC; (atualiza N e Z)
-    std::cout << "### ESTADO 10 ###" << std::endl;
-
-    break;
-
-  case 11: // JUMP, JN && N=1, JZ && Z=1: LPC; M0(0); LREM; R/W(0); LRDM; LPC;
+  case 11: // LDR: R/W(0); LRDM (DO REM); - INDEXADO
     std::cout << "### ESTADO 11 ###" << std::endl;
-    PO.M.loadREM( PO.PC.leituraAtual );
-    PO.M.loadRDM();
-    PO.PC.loadPC( PO.M.rdm ); // Go to endereço contido no RDM
+      PO.M.loadRDM();
+      relogio.clockMemoria();
 
     break;
 
-  case 12: // INSTRUÇÕES LA: M2(r); SULA(op); (atualiza N e Z no caso AND/OR e C no caso ADD/SUB); Lr;
+  case 12: // LA BINARIA: M2(r); SULA(op); (atualiza N e Z no caso AND/OR e C no caso ADD/SUB); Lr;
    // DIRETO
    if( PO.RI.registrador == A ){
       PO.BR.RA.loadRA( PO.ULA.executarOperacao( PO.BR.RA.A, PO.M.rdm, PO.RI.opcode ) );
@@ -350,19 +353,81 @@ void UnidadeControle::fs ( int atual ) { // Função de saída ~ recebe o estado
       PO.BR.RB.loadRB( PO.ULA.executarOperacao( PO.BR.RB.B, PO.M.rdm, PO.RI.opcode ) );
     } else if ( PO.RI.registrador == X ){
       PO.BR.RX.loadRX( PO.ULA.executarOperacao( PO.BR.RX.X, PO.M.rdm, PO.RI.opcode ) );
-    }     
+    }
+    relogio.clockLA(); 
 
     break;
 
-    case 14: // INSTRUÇÕES DESVIO: M0(0); LREM; R/W(0); LRDM; M1(0); LPC;  // DIRETO
-      PO.M.loadREM( PO.PC.leituraAtual );
-      PO.M.loadRDM( PO.M.rem );
+  case 13: // LA UNARIA:  M2(r); ULA(op); Lr; (atualiza N e Z)
+    std::cout << "### ESTADO 13 ###" << std::endl;
+    if( PO.RI.registrador == A ){
+      PO.BR.RA.loadRA( PO.ULA.executarOperacao( PO.BR.RA.A, PO.RI.opcode ) );
+    } else if( PO.RI.registrador == B ){
+      PO.BR.RB.loadRB( PO.ULA.executarOperacao( PO.BR.RB.B, PO.RI.opcode ) );
+    } else if ( PO.RI.registrador == X ){
+      PO.BR.RX.loadRX( PO.ULA.executarOperacao( PO.BR.RX.X, PO.RI.opcode ) );
+    }
+    relogio.clockLA(); 
 
     break;
 
-    case 999999914: // INSTRUÇÕES DESVIO: M0(0); LREM; R/W(0); LRDM; M1(0); LPC;  // DIRETO
-      PO.M.loadREM( PO.PC.leituraAtual );
-      PO.M.loadRDM(); // leitura da memoria
+  case 14: // JMP / JN / JZ / JC (TRUE): M0(0); LREM; R/W(0); LRDM; - DIRETO
+    std::cout << "### ESTADO 14 ###" << std::endl;
+
+
+    break;
+
+  case 15: // JMP / JN / JZ / JC (TRUE): M1(0); LPC; - DIRETO
+    std::cout << "### ESTADO 15 ###" << std::endl;
+
+
+    break;
+
+  case 16: // JMP / JN / JZ / JC (TRUE): IPC; - IMEDIATO
+    std::cout << "### ESTADO 16 ###" << std::endl;
+    //PO.
+
+    break;
+
+  case 17: // JMP / JN / JZ / JC (TRUE): SUM; M1(1); LPC; [soma de ponteiros] - INDEXADO
+    std::cout << "### ESTADO 17 ###" << std::endl;
+
+
+    break;
+
+  case 18: // R/W(1) [em temp];
+    std::cout << "### ESTADO 18 ###" << std::endl;
+    PO.M.temp = PO.M.rdm;
+
+    break;
+
+  case 19: // 
+    std::cout << "### ESTADO 19 ###" << std::endl;
+    PO.M.loadREM( PO.M.temp );
+
+    break;
+
+  case 20: // 
+    std::cout << "### ESTADO 20 ###" << std::endl;
+
+
+    break;
+
+  case 21: // 
+    std::cout << "### ESTADO 21 ###" << std::endl;
+
+
+    break;
+
+  case 22: // 
+    std::cout << "### ESTADO 22 ###" << std::endl;
+
+
+    break;
+
+  case 23: // 
+    std::cout << "### ESTADO 23 ###" << std::endl;
+
 
     break;
 

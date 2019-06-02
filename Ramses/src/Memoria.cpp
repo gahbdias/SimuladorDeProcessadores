@@ -13,14 +13,43 @@
 
 void Memoria::imprimeDados (){
 
+  std::string opcode;
+  std::string registrador;
+  std::string modo;
+
   std::cout << "RDM: " << rdm << std::endl;
   std::cout << "REM: " << rem << std::endl;
 
   for( int i=0; i<256; i++ ){
-    if( memoria[i] != LIXO ){
+    if( memoria[i] != LIXO and memoria[i] < 256 ){
       std::cout << "Memoria[" << i << "]: " << memoria[i] << std::endl;
+    } else if( memoria[i] != LIXO ){
+      codeToStr( memoria[i], &opcode, &registrador, &modo);
+      std::cout << "Memoria[" << i << "]: " << opcode << ", " << registrador << ", " << modo << std::endl;
     }
   }
+}
+
+void Memoria::codeToStr( int instrucao, std::string* opcode, std::string* registrador, std::string* modo) {
+  int codigo[3];
+  std::stringstream ss;
+  int aux;
+
+  std::string opcodeString[23]{ "NOP", "STR", "LDR", "ADD", "OR", "AND", "SUB", "NOT", "JMP", "JN", "JZ", "JC", "JSR", "NEG", "SHR", "HLT"};
+  std::string modoString[4]{ "DIRETO", "INDIRETO", "IMEDIATO", "INDEXADO" };
+  std::string registradorString[4]{ "A", "B", "X", "NONE" };
+
+  for ( int i=0; i<3; i++ ){
+    aux = instrucao%100;
+    codigo[i] = aux;
+    instrucao = ( instrucao - aux )/100;
+  }
+
+  *opcode = opcodeString[ codigo[2]-10 ];
+
+  *registrador = registradorString[ codigo[1]-30 ];
+
+  *modo = modoString[ codigo[0]-40 ];
 }
 
 void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileNameData ){
@@ -113,7 +142,8 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
     if( temEnd ){
       std::stringstream str( end ); // string stream para conversão
       str >> endereco;
-      this->memoria[i+1] = endereco;
+      this->memoria[i] = endereco;
+      i++;
     }
    
   }
@@ -132,6 +162,7 @@ void Memoria::preencherMemoria ( std::string  fileNameAlg, std::string  fileName
 
   // preenche memória com os dados
   std::cout << "Lendo arquivo de dados..." << std::endl;
+  std::cout << std::endl;
 
   i=128;
   while( !dataFile.eof() and i < 256 ){

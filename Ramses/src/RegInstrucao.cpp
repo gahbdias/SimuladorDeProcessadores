@@ -23,8 +23,7 @@ void RegInstrucao::decodificar( int instrucao ){
 		aux = instrucao%100;
 		codigo[i] = aux;
 		instrucao = (instrucao-aux)/100;
-	}
-	
+	}	
 
 	this->opcode = codigo[2];
 	this->registrador = codigo[1];
